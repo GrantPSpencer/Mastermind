@@ -16,7 +16,7 @@ public class PatternGenerator {
 
         StringBuilder urlSB = new StringBuilder();
 
-        //https://www.random.org/integers/?num=10&min=1&max=6&col=1&base=10&format=plain&rnd=new
+        //https://www.random.org/integers/?num=4&min=1&max=6&col=1&base=10&format=plain&rnd=new
         urlSB.append("https://www.random.org/integers/?num=");
         urlSB.append(size);
         urlSB.append("&min=0&max=7&col=1&base=10&format=plain&rnd=new");
@@ -42,17 +42,12 @@ public class PatternGenerator {
     }
 
     private static int[] removeDuplicates(int[] pattern) {
-        System.out.println("before remove");
-        for (int i = 0; i < pattern.length; i++) {
-            System.out.println(pattern[i] + " ... " + i);
-        }
-        System.out.println("after remove");
+
 
         HashSet<Integer> usedIntegerSet = new HashSet<>();
         HashSet<Integer> duplicatesIndexSet = new HashSet<>();
         for (int i = 0; i < pattern.length; i++) {
             if (usedIntegerSet.contains(pattern[i])) {
-                System.out.println("duplicate is: " + pattern[i] + " at index: " + i);
                 duplicatesIndexSet.add(i);
             }
             usedIntegerSet.add(pattern[i]);
