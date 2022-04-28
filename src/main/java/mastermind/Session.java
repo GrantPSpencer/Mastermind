@@ -33,17 +33,30 @@ public class Session {
         // int[] newPattern = new int[] {0,1,3,3};
         // this.currentGame = new Game(newPattern);
         String line = promptUserInput("Start a new game? (y/n): ");
-        while ("y".equals(line)) {
-            this.startNewGame();
+        while (!checkYesNoString(line)) {
+            System.out.println("Error, please respond with a \"y\" for yes ,or a \"n\" for no");
             line = promptUserInput("Start a new game? (y/n): ");
+        }
+        while (line.equals("y") || line.equals("yes")) {
+            this.startNewGame();
+            line = promptUserInput("Start a new game? (y/n): "); 
+            while (!checkYesNoString(line)) {
+                System.out.println("Error, please respond with a \"y\" for yes ,or a \"n\" for no");
+                line = promptUserInput("Start a new game? (y/n): ");
+            }
+        }
 
+        if (scoreHistory.size() > 0) {
+            int scoreHistorySum = 0;
+            for (int score : scoreHistory) {
+                scoreHistorySum += score;
+            }
+            System.out.println("\nSession over! You played " + scoreHistory.size() + " games, with an average of " + 
+            (double)(scoreHistorySum/scoreHistory.size()) + " guesses per game");
         }
-        int scoreHistorySum = 0;
-        for (int score : scoreHistory) {
-            scoreHistorySum += score;
-        }
-        System.out.println("Session over! You played " + scoreHistory.size() + " games, with an average of " + 
-        (double)(scoreHistorySum/scoreHistory.size()) + " guesses per game");
+
+        System.out.println("\nThanks for playing!");
+        
 
     }
 
@@ -51,11 +64,13 @@ public class Session {
         // get game settings from user input in terminal, provide promp;
         // int gameSize;
         // boolean duplicatesAllowed;
-
+        
         boolean newSettings;
         if (currentGame != null) {
+            
             System.out.print("Would you like to use the settings from your previous game? (y/n): ");
-            newSettings = "n".equals(this.bufferedReader.readLine());
+            String line = this.bufferedReader.readLine();
+            newSettings = (line.equals("n") || line.equals("no"));
         } else {
             newSettings = true;
         }
@@ -155,34 +170,78 @@ public class Session {
     private String promptUserInput(String message) throws IOException {
         System.out.print(message);
  
-        return bufferedReader.readLine();
+        return bufferedReader.readLine().toLowerCase();
     }
 
-    private boolean checkGuessString(String guessString, int patternSize) {
-        // incorrect size
-        if (guessString.length() != patternSize) {
+    private boolean checkYesNoString(String line) {
+        if (line.equals("y") || line.equals("yes") || line.equals("n") || line.equals("no")) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkSingleNumberString(String line) {
+        if (line.length() > 1) {
             return false;
         }
-        // not all letters are digits (0-7)
-        for (int i = 0; i < guessString.length(); i++) {
-            if (Character.getNumericValue(guessString.charAt(i)) > 8) {
-                return false;
-            }
+        char c = line.charAt(0);
+        if (Character.getNumericValue(c) < 4 || Character.getNumericValue(c) > 8) {
+            return false;
         }
+
+
         return true;
 
-
     }
+
+
+
+    // private boolean checkGuessString(String guessString, int patternSize) {
+    //     // incorrect size
+    //     if (guessString.length() != patternSize) {
+    //         return false;
+    //     }
+    //     // not all letters are digits (0-7)
+    //     for (int i = 0; i < guessString.length(); i++) {
+    //         if (Character.getNumericValue(guessString.charAt(i)) > 8) {
+    //             return false;
+    //         }
+    //     }
+    //     return true;
+
+
+    // }
 
     private void requestSettings() throws IOException {
         System.out.print("\nHow many numbers?: ");
         //ADD ERROR CHECK
-        this.gameSize = Integer.parseInt(this.bufferedReader.readLine());
+        String line = this.bufferedReader.readLine(); 
+        while (!checkSingleNumberString(line)) {
+            System.out.println("Number of digits must be between 4 and 8, inclusive");
+            System.out.print("\nHow many digits?: ");
+            line =this.bufferedReader.readLine(); 
+        }
+        // while (lineVal < 0 || lineVal > 8) {
+        //     System.out.println("Number of digits must be between 4 and 8, inclusive");
+        //     System.out.print("\nHow many digits?: ");
+        //     line =this.bufferedReader.readLine(); 
+        //     lineVal = Integer.parseInt(line);
+        // }
+        this.gameSize = Integer.parseInt(line);
         //ADD ERROR CHECK
         System.out.print("\nDuplicates allowed? (y/n): ");
-        this.duplicatesAllowed = "y".equals(this.bufferedReader.readLine());
+        line = this.bufferedReader.readLine();
+        while (!checkYesNoString(line)) {
+            System.out.println("Error, please respond with a \"y\" for yes ,or a \"n\" for no");
+            line = promptUserInput("Duplicates allowed? (y/n): ");
+        }
+        this.duplicatesAllowed = (line.equals("y") || line.equals("yes"));
+        
+
     }
     
+   
+
     public static void main(String[] args) throws Exception {
         try {
             Session session = new Session();
