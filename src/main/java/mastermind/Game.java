@@ -15,10 +15,14 @@ public class Game
 {
 
     public int[] PATTERN;
-    private int LENGTH; 
-    private int remainingGuesses;
+    public int LENGTH; 
+    public int remainingGuesses;
     private LinkedList<int[]> guessHistory;
+    //correct placements array used for always giving useful hint
+    private int[] correctPlacementsArray;
     // private HashMap<Integer, Integer> patternMap = new HashMap<>();
+    boolean gameOver;
+    boolean gameWon;
     
 
     public Game(int[] pattern) {
@@ -26,6 +30,9 @@ public class Game
         this.LENGTH = PATTERN.length;
         this.remainingGuesses = 10;
         this.guessHistory = new LinkedList<>();
+        this.correctPlacementsArray = new int[this.LENGTH];
+        this.gameOver = false;
+        this.gameWon = false;
 
         //instantiate pattern hashmap
         // for (int num : PATTERN) {
@@ -35,8 +42,17 @@ public class Game
 
     public int[] guess(int[] guessArray) {
 
-        if (remainingGuesses == 0) {
+        if (this.gameOver || this.remainingGuesses == 0) {
             throw new Error("Game is already over");
+        }
+
+        if (!checkGuessArray(guessArray)) {
+            if (guessArray.length == 4 && 'h' == Character.forDigit(guessArray[0], 36) && 'i' == Character.forDigit(guessArray[1], 36)
+             && 'n' == Character.forDigit(guessArray[2], 36) && 't' == Character.forDigit(guessArray[3], 36)) {
+                this.giveHint();
+                return new int[] {1};
+            }
+            return new int[] {};
         }
 
         int[] feedback = this.judgeGuess(guessArray);
@@ -49,12 +65,42 @@ public class Game
         }
         Collections.shuffle(tempList);
         
-        // int i = 0;
-        // for (int num : tempList) {
-        //     feedback[i++] = (int) num;
-        // }
+        // budget shuffle
+        int i = 0;
+        for (int num : tempList) {
+            feedback[i++] = (int) num;
+        }
+
+        //check if no more guesses
+        if (remainingGuesses == 0) {
+            this.gameOver = true;
+        }
+
+        // testing correct placements array 
+        // System.out.print("\n");
+        // System.out.println("Correctly placed so far: ");
+        // System.out.println(Arrays.toString(PATTERN));
+        // System.out.println(Arrays.toString(this.correctPlacementsArray));
+        // System.out.print("\n");
+
         
         return feedback;
+
+    }
+
+    private boolean checkGuessArray(int[] guessArray) {
+        // incorrect size
+        if (guessArray.length != this.LENGTH) {
+            return false;
+        }
+        // not all letters are digits (0-7)
+        for (int i = 0; i < guessArray.length; i++) {
+            if (guessArray[i] > 8 || guessArray[i] < 0) {
+                return false;
+            }
+        }
+        return true;
+
 
     }
 
@@ -64,6 +110,8 @@ public class Game
         HashMap<Integer, Integer> patternMap = new HashMap<>();
 
         //first pass
+        //use sum to determine if game winning guess
+        int winnerSumCheck = 0;
         for (int i = 0; i < LENGTH; i++) {
 
 
@@ -71,12 +119,21 @@ public class Game
             // if not, add to patternMap for second pass checking for correct color but incorrect placement
             if (guessArray[i] == PATTERN[i]) {
                 responseArray[i] = 1;
+                this.correctPlacementsArray[i] = 1;
+                winnerSumCheck++;
             } else {
                 // responseArray[i] = -1;
                 patternMap.put(PATTERN[i], patternMap.getOrDefault(PATTERN[i], 0)+1);
             }
 
 
+        }
+
+        //check if game was won, if yes then mark game done + won and return early
+        if (winnerSumCheck == LENGTH) {
+            this.gameOver = true;
+            this.gameWon = true;
+            return responseArray;
         }
 
         //second pass
@@ -106,6 +163,21 @@ public class Game
     private void resetGame() {
         this.remainingGuesses = 10;
         this.guessHistory = new LinkedList<>();
+    }
+
+    public void giveHint() {
+        //tells user location of undiscovered digit (not yet correctly placed in any guesses)
+        for (int i = 0; i < this.LENGTH; i++) {
+            if (correctPlacementsArray[i] != 1) {
+                System.out.println("Digit " + this.PATTERN[i] + " is located at index " + i);
+                correctPlacementsArray[i] = 1;
+                return;
+            }
+        }
+
+        //if player has correctly placed each digit across all guesses (but not won), then picks pseudo random number
+        int randomInt = Math.round((int) (Math.random()*(this.LENGTH)));
+        System.out.println("Digit " + this.PATTERN[randomInt] + " is located at index " + randomInt);
     }
 
 
