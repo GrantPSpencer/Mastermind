@@ -17,21 +17,19 @@ public class MastermindBotIT {
 
 // THIS ONLY PLAYS GAMES OF LENGTH 4 (8 POSSIBLE DIGITS, DUPLICATES ALLOWED)
     private final int LENGTH = 4;
-    HashSet<int[]> possibleAnswerSet;
+    private HashSet<int[]> possibleAnswerSet;
 
-    public MastermindBotIT() {
-        possibleAnswerSet = new HashSet<>();
+    // public MastermindBotIT() {
 
-        System.out.println("Populating answer set");    
-        populateAnswerSet();
-        System.out.println("Finished populating answer set");
+        
 
 
-    }
+    // }
 
 
 
     public int playGame(Game game) {
+        this.possibleAnswerSet = getAnswerSet();
         
         //guess best guess
         System.out.println("possible guess size is: " + possibleAnswerSet.size());
@@ -56,8 +54,13 @@ public class MastermindBotIT {
             
 
         }
+        if (game.gameWon) {
+            return (10-game.remainingGuesses);
+        } else {
+            return (11);
+        }
 
-        return (10-game.remainingGuesses);
+       
     }
 
 
@@ -173,9 +176,9 @@ public class MastermindBotIT {
 
 
 
-    private void populateAnswerSet() {
+    private HashSet<int[]> getAnswerSet() {
         
-
+        HashSet<int[]> answerSet = new HashSet<>();
 
         for (int i = 0; i < 8; i++) {
 
@@ -185,20 +188,17 @@ public class MastermindBotIT {
                 for (int k = 0; k < 8; k++) {
 
                     for (int l = 0; l < 8; l++) {
-                        this.possibleAnswerSet.add(new int[] {i, j, k, l});
+                        answerSet.add(new int[] {i, j, k, l});
                     }
                 }
             }
         }
+
+        return answerSet;
     }
 
 
-    // private int[] simulateGames(int[] guessArray) {
-
-
-    //     return new int[] {};
-    // }
-
+    //stores average bits and worst case bits from each guess across all possible games
     public void findBestFirstGuess() throws IOException {
         
         System.out.println("finding best first guess");
@@ -254,9 +254,6 @@ public class MastermindBotIT {
 
     }
 
-    public void findBestFirstGuessWorstCase() {
-        
-    }
 
     public static void main(String[] args) {
         MastermindBotIT bot = new MastermindBotIT();
