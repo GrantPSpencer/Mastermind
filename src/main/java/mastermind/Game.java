@@ -35,6 +35,9 @@ public class Game
         this.gameOver = false;
         this.gameWon = false;
 
+        //testing purposes only
+        System.out.println("Correct pattern: " + Arrays.toString(this.PATTERN));
+
         //instantiate pattern hashmap
         // for (int num : PATTERN) {
         //     patternMap.put(num, patternMap.getOrDefault(num, 0)+1);

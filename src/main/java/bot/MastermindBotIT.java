@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 
 import mastermind.Game;
+import mastermind.PatternGenerator;
 
 public class MastermindBotIT {
     
@@ -35,7 +36,7 @@ public class MastermindBotIT {
         //guess best guess
         System.out.println("possible guess size is: " + possibleAnswerSet.size());
         System.out.println("Guess #:" + (11-game.remainingGuesses));
-        int[] bestGuess = new int[] {0,1,0,1};
+        int[] bestGuess = new int[] {0,1,3,5};
         System.out.println(Arrays.toString(bestGuess));
         int[] feedback = game.guess(bestGuess);
 
@@ -203,18 +204,30 @@ public class MastermindBotIT {
         System.out.println("finding best first guess");
         long startTime = System.currentTimeMillis();
         
-        File file = new File("src/main/java/bot/first_guess_performance.txt");
-        FileWriter writer = new FileWriter(file);
+        File avgFile = new File("src/main/java/bot/first_guess_performance_averagecase_test.txt");
+        File worstFile = new File("src/main/java/bot/first_guess_performance_worstcase_test.txt");
+        FileWriter avgWriter = new FileWriter(avgFile);
+        FileWriter worstWriter = new FileWriter(worstFile);
 
         int i = 0;
+        System.out.print("\n");
+        String arrayStr;
         for (int[] possibleGuess : possibleAnswerSet) {
             double sum = 0;
-            System.out.println("i is: " + i++);
+            double minBits = Double.MAX_VALUE;
+            System.out.println("\rProgress: " + i++ + " / " + possibleAnswerSet.size());
             for (int[] possibleAnswer : possibleAnswerSet) {
-                sum += getBits(possibleGuess, possibleAnswer);
+                // sum += getBits(possibleGuess, possibleAnswer);
+                double toAddBits = getBits(possibleGuess, possibleAnswer);
+                sum += toAddBits;
+                minBits = Math.min(toAddBits, minBits);
             }
-            
-            writer.write(Arrays.toString(possibleGuess) + ", " + (sum/possibleAnswerSet.size()) + ";\n");
+            arrayStr = Arrays.toString(possibleGuess);
+            avgWriter.write(arrayStr + ", " + (sum/possibleAnswerSet.size()) + "\n");
+            worstWriter.write(arrayStr + ", " + minBits + "\n");
+            if (i == 10) {
+                break;
+            }
         }
         
 
@@ -228,26 +241,40 @@ public class MastermindBotIT {
 
 
 
-        writer.write("Started at: " + new Date(startTime) + "\n");
-        writer.write("Finished at: " + new Date(endTime)+"\n");
-        writer.write("Time to completion: " +String.format("%02d:%02d:%02d:%d", hours, minutes, seconds, milliseconds)+"\n");
+        avgWriter.write("\nStarted at: " + new Date(startTime) + "\n");
+        avgWriter.write("Finished at: " + new Date(endTime)+"\n");
+        avgWriter.write("Time to completion: " +String.format("%02d:%02d:%02d:%d", hours, minutes, seconds, milliseconds)+"\n");
 
         
-        writer.flush();
-        writer.close();
+        avgWriter.flush();
+        avgWriter.close();
 
+        worstWriter.flush();
+        worstWriter.close();
+
+    }
+
+    public void findBestFirstGuessWorstCase() {
+        
     }
 
     public static void main(String[] args) {
         MastermindBotIT bot = new MastermindBotIT();
-        
-        bot.playGame(new Game(new int[] {1,0,1,0}));
         // try {
-        //     bot.findBestFirstGuess();
-        // } catch (IOException e) {
+        //     bot.playGame(new Game(PatternGenerator.generatePattern(4, true)));
+        // } catch (Exception e) {
         //     // TODO Auto-generated catch block
         //     e.printStackTrace();
         // }
+        
+        // bot.playGame(new Game(new int[] {1,0,1,0}));
+
+        try {
+            bot.findBestFirstGuess();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     
