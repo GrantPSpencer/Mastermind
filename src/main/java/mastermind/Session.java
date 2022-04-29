@@ -142,12 +142,7 @@ public class Session {
             // }
             // System.out.print("\n");
         }
-        System.out.print("\n");
-        if (game.gameWon) {
-            System.out.println("Congrats you won!\n");
-        } else {
-            System.out.println("Uh oh, looks like you lost you friggin loser!\n");
-        }
+
         //add game score
         scoreHistory.addLast(10 - game.remainingGuesses);
     }
