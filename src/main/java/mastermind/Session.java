@@ -88,15 +88,17 @@ public class Session {
     // can optimize where checkguessString passes back the guessArray, since I'm already converting to numeric value in the check function
     private void playGame(Game game) throws IOException {
         //for testing purpose only
-        System.out.println("Correct Pattern: " + Arrays.toString(game.PATTERN));
-        System.out.println("If you need a hint, just type \"hint\" as your response");
+        // System.out.println("Correct Pattern: " + Arrays.toString(game.PATTERN));
+        
         //for testing purpose only
 
         //Move checkguess function to game class?
         int[] guessArray;
         String guessString;
         int[] responseArray;
+        System.out.println("\nIf you need a hint, just type \"hint\" as your response");
         while (!game.gameOver) {
+            
             // String guessString = promptGuess(game.LENGTH);
             System.out.println("\nYou have " + game.remainingGuesses + " guesses left");
             guessString = promptUserInput("Make your guess (" + game.LENGTH +" numbers): ");

@@ -46,10 +46,10 @@ public class Simulator {
         long startTime = System.currentTimeMillis();
         MastermindBotIT bot = new MastermindBotIT();
         
-        File file = new File("src/main/java/bot/performance_simulation_results");
+        File file = new File("src/main/java/bot/performance_simulation_results.txt");
         FileWriter writer = new FileWriter(file);
 
-        File timeFile = new File("src/main/java/bot/performance_simulation_times");
+        File timeFile = new File("src/main/java/bot/performance_simulation_times.txt");
         FileWriter timeWriter = new FileWriter(timeFile);
 
         int score; 

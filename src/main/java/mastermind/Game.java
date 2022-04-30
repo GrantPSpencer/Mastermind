@@ -36,7 +36,7 @@ public class Game
         this.gameWon = false;
 
         //testing purposes only
-        System.out.println("Correct pattern: " + Arrays.toString(this.PATTERN));
+        // System.out.println("Correct pattern: " + Arrays.toString(this.PATTERN));
 
         //instantiate pattern hashmap
         // for (int num : PATTERN) {
