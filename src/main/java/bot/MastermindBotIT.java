@@ -203,6 +203,7 @@ public class MastermindBotIT {
         
         System.out.println("finding best first guess");
         long startTime = System.currentTimeMillis();
+        this.possibleAnswerSet = getAnswerSet();
         
         File avgFile = new File("src/main/java/bot/first_guess_performance_averagecase_test.txt");
         File worstFile = new File("src/main/java/bot/first_guess_performance_worstcase_test.txt");
@@ -225,9 +226,6 @@ public class MastermindBotIT {
             arrayStr = Arrays.toString(possibleGuess);
             avgWriter.write(arrayStr + ", " + (sum/possibleAnswerSet.size()) + "\n");
             worstWriter.write(arrayStr + ", " + minBits + "\n");
-            if (i == 10) {
-                break;
-            }
         }
         
 
