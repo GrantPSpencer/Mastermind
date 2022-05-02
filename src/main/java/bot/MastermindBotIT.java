@@ -8,16 +8,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
-
-import javax.print.attribute.HashPrintServiceAttributeSet;
-
 import mastermind.Game.Game;
 import mastermind.Game.PatternGenerator;
 
 public class MastermindBotIT {
     
 
-// THIS ONLY PLAYS GAMES OF LENGTH 4 (8 POSSIBLE DIGITS, DUPLICATES ALLOWED)
+// THIS IS ONLY INTENDED TO PLAY GAMES OF LENGTH 4 (8 POSSIBLE DIGITS, DUPLICATES ALLOWED)
 // The time complexity for the getBits algorithm is n^2 and it requires a bit of time to run. 
 // Increasing the code length would cause a SIGNIFICANT increase on runtime
 
@@ -169,7 +166,7 @@ public class MastermindBotIT {
 
     
 
-        //second pass
+        //Second pass
         for (int i = 0; i < LENGTH; i++) {
             //Skip bulls (already counted for in first pass)
             if (usedIndexSet.contains(i)) {

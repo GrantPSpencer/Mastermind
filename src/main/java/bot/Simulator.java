@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
 import mastermind.Game.Game;
 
 public class Simulator {
@@ -20,6 +19,7 @@ public class Simulator {
         this.possibleAnswerSet = getAnswerSet();
     }
 
+    //generates answer set
     private HashSet<int[]> getAnswerSet() {
         
         HashSet<int[]> answerSet = new HashSet<>();
@@ -41,6 +41,8 @@ public class Simulator {
         return answerSet;
     }
 
+
+    //Plays the bot across all possible games, prints out results to text files
     public void simulateGames() throws IOException {
 
         long startTime = System.currentTimeMillis();

@@ -1,212 +1,163 @@
 package mastermind.Game;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Queue;
 
 /**
  * Hello world!
  *
  */
-public class Game 
-{
+public class Game {
 
-    public int[] PATTERN;
-    public int LENGTH; 
+    private final int[] PATTERN;
+    public final int LENGTH; 
+
     public int remainingGuesses;
     private LinkedList<int[]> guessHistory;
-    //correct placements array used for always giving useful hint
-    private int[] correctPlacementsArray;
-    // private HashMap<Integer, Integer> patternMap = new HashMap<>();
+
     public boolean gameOver;
     public boolean gameWon;
+
+    //Correct placements array used for always giving useful hint
+    private int[] correctPlacementsArray;
+    private Queue<Integer> hintQueue;
+
     
 
-    // new game(PaternGenerator.generatePattern(4, false));
     public Game(int[] pattern) {
         this.PATTERN = pattern;
         this.LENGTH = PATTERN.length;
 
         this.remainingGuesses = 10;
         this.guessHistory = new LinkedList<>();
-        this.correctPlacementsArray = new int[this.LENGTH];
 
         this.gameOver = false;
         this.gameWon = false;
 
-        //testing purposes only
+        this.correctPlacementsArray = new int[this.LENGTH];
+        this.hintQueue = new LinkedList<>();
+
+
+
+        //For testing purposes only
         System.out.println("Correct pattern: " + Arrays.toString(this.PATTERN));
 
-        //instantiate pattern hashmap
-        // for (int num : PATTERN) {
-        //     patternMap.put(num, patternMap.getOrDefault(num, 0)+1);
-        // }
     }
 
+    //Judges the passed guessArray, decrements remaining guess count, and returns # of bulls and cows
     public int[] guess(int[] guessArray) {
 
         if (this.gameOver || this.remainingGuesses == 0) {
             throw new Error("Game is already over");
         }
 
-        //rename check valid guess
-        // if (!checkGuessArray(guessArray)) {
-        //     if (guessArray.length == 4 && 'h' == Character.forDigit(guessArray[0], 36) && 'i' == Character.forDigit(guessArray[1], 36)
-        //      && 'n' == Character.forDigit(guessArray[2], 36) && 't' == Character.forDigit(guessArray[3], 36)) {
-        //         this.giveHint();
-        //         return new int[] {1};
-        //     }
-        //     return new int[] {};
-        // }
-
         int[] feedback = judgeGuess(guessArray);
         this.remainingGuesses--;
         this.guessHistory.addLast(guessArray);
-        
-        // List<Integer> tempList = new ArrayList<>(LENGTH);
-        // for (int num : feedback) {
-        //     tempList.add(num);
-        // }
-        // Collections.shuffle(tempList);
-        
-        // budget shuffle
-        // int i = 0;
-        // for (int num : tempList) {
-        //     feedback[i++] = (int) num;
-        // }
 
-        //check if no more guesses
+        //Check if no more guesses (game over)
         if (remainingGuesses == 0) {
-        //     System.out.print("\n");
-        //     System.out.println("Uh oh, looks like you lost you friggin loser!\n");
             this.gameOver = true;
         }
 
-
-        
         return feedback;
 
     }
-
-    //rename check valid guess
-    private boolean checkGuessArray(int[] guessArray) {
-        // incorrect size
-        if (guessArray.length != this.LENGTH) {
-            return false;
-        }
-        // not all letters are digits (0-7)
-        for (int i = 0; i < guessArray.length; i++) {
-            if (guessArray[i] > 8 || guessArray[i] < 0) {
-                return false;
-            }
-        }
-        return true;
-
-
-    }
-
-
+    //Returns the # of bulls (correct digit and placement) and cows (correct digit, incorrect placement)
     private int[] judgeGuess(int[] guessArray) {
-        int[] responseArray = new int[2];
-
+        
+        //Used to correctly detect cows
         HashMap<Integer, Integer> patternMap = new HashMap<>();
 
-        //first pass
-        //use sum to determine if game winning guess
-        // int winnerSumCheck = 0;
-        int bulls = 0;
-        int cows = 0;
+        //Used to ensure we do not counts bulls as cows
         HashSet<Integer> usedIndexSet = new HashSet<>();
 
+
+        int bulls = 0;
+        int cows = 0;
+        
+        //First pass
         for (int i = 0; i < LENGTH; i++) {
 
-            //check if correct color and placement
-            // if not, add to patternMap for second pass checking for correct color but incorrect placement
+            //Check if bull
+            //If not, add to patternMap and incremement value for second pass checking for cows
+            //Mark as correctly placed in correctPlacementsArray for hint giving function
             if (guessArray[i] == PATTERN[i]) {
-                // responseArray[i] = 1;
                 usedIndexSet.add(i);
+
+                //If not correctly placed before, add to hintQueue
+                if (this.correctPlacementsArray[i] != 1) {
+                    this.hintQueue.offer(i);
+                }
+
                 this.correctPlacementsArray[i] = 1;
                 bulls++;
-                // winnerSumCheck++;
             } else {
-                // responseArray[i] = -1;
                 patternMap.put(PATTERN[i], patternMap.getOrDefault(PATTERN[i], 0)+1);
             }
         }
 
-        //0,1,2,3 pattern
-        //0,2,1,5 guess
-
-        // map: key -> digit from the pattern, value is frequency
-
-
-        responseArray[0] = bulls;
-        //check if game was won, if yes then mark game done + won and return early
+        //Check if game was won, if yes then mark game done + won and return early
         if (bulls == LENGTH) {
             this.gameOver = true;
             this.gameWon = true;
-
-            // System.out.print("\n");
-            // System.out.println("Congrats you won!\n");
-
-            return responseArray;
+            return new int[] {bulls, cows};
         }
 
-        //second pass
-
+        //Second pass
         for (int i = 0; i < LENGTH; i++) {
-            //skip correctly placed colors
+            //Skip bulls (already counted for in first pass)
             if (usedIndexSet.contains(i)) {
                 continue;
             }
 
-            //check if color is in the pattern
-            // if it is, set response value to 0 (deprecated)
-            // if it is not, set response value to -1 (deprecated)
+            //Check if digit is in the code pattern
+            //If it is, then decrement value to properly count cows
             if (patternMap.containsKey(guessArray[i]) && patternMap.get(guessArray[i]) > 0) {
                 patternMap.put(guessArray[i], patternMap.get(guessArray[i])-1);
-                // responseArray[i] = 0;
                 cows++;
-            } else {
-                // responseArray[i] = -1;
             }
         }
 
-        responseArray[1] = cows;
-        return responseArray;
+        return new int[] {bulls, cows};
 
 
     }
 
-    
+    //Unimplemented functionality (Add to GUI)
     private void resetGame() {
         this.remainingGuesses = 10;
         this.guessHistory = new LinkedList<>();
     }
 
+    //Tells user location of undiscovered digit (not yet correctly placed in any guesses)
+    //If all digits have been correctly placed (across all guesses), then it returns previously revealed info in
+        // the order it was originally revealed
     public int[] giveHint() {
-        //tells user location of undiscovered digit (not yet correctly placed in any guesses)
+        
+        //If all positions have been revealed either through guesses or hints,
+            // then loop through and return hints in the order in which they were revealed
+        if (this.hintQueue.size() == this.LENGTH) {
+            int hintIndex = this.hintQueue.poll();
+            this.hintQueue.offer(hintIndex);
+
+            return new int[] {hintIndex, this.PATTERN[hintIndex]};
+        }
+
+        //Loop over correctPlacementsArray until finding index that has not been correctly placed
         for (int i = 0; i < this.LENGTH; i++) {
-            if (correctPlacementsArray[i] != 1) {
-                // System.out.println("Digit " + this.PATTERN[i] + " is located at index " + i);
-                correctPlacementsArray[i] = 1;
+            if (this.correctPlacementsArray[i] != 1) {
+                this.hintQueue.offer(i);
+                this.correctPlacementsArray[i] = 1;
                 return new int[] {i, this.PATTERN[i]};
             }
         }
 
-        //if player has correctly placed each digit across all guesses (but not won), then picks pseudo random number
-        int randomInt = Math.round((int) (Math.random()*(this.LENGTH)));
-        // System.out.println("Digit " + this.PATTERN[randomInt] + " is located at index " + randomInt);
-        return new int[] {randomInt, this.PATTERN[randomInt]};
-        // add way to not give same hint twice
-        // array of booleans, after 2 guesses allow the hint to be given again?
+        return new int[] {-1,-1};
+
     }
-
-
-
 
 }

@@ -19,11 +19,12 @@ public class SettingsPanel extends JPanel {
 
     public SettingsPanel() {
 
+        //Create allow duplicates checkbox and have it pre-checked as "true"
         this.jCheckBox = new JCheckBox("Allow Duplicates?");
         this.jCheckBox.setSelected(true);
-        // this.jCheckBox.setPreferredSize(new Dimension(100, 100));
         add(this.jCheckBox,BorderLayout.CENTER);
 
+        //Create code length dropdown option menu
         JPanel panel2 = new JPanel();
         JLabel jLabel = new JLabel("Code Length:");
         this.options = new String[] {"4","5","6","7","8"};
