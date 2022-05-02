@@ -103,11 +103,20 @@ public class Session {
             System.out.println("\nYou have " + game.remainingGuesses + " guesses left");
             guessString = promptUserInput("Make your guess (" + game.LENGTH +" numbers): ");
 
-            // if (guessString.toLowerCase().equals("hint")) {
-            //     //give hint;
-                
-            //     continue;
-            // }
+
+            while (!checkValidGuessString(guessString)) {
+                System.out.print("Error: Length of guess must be " + game.LENGTH + " digits long and only contain digits from 0 to 7, please guess again\n");
+                guessString = promptUserInput("\nMake your guess (" + game.LENGTH +" numbers): ");
+            }
+            
+
+            if (guessString.toLowerCase().equals("hint")) {
+                //give hint;
+                game.giveHint();
+                continue;
+            }
+
+
 
             guessArray = new int[guessString.length()];
             for (int i = 0; i < guessString.length(); i++) {
@@ -115,17 +124,19 @@ public class Session {
             }
 
 
-             responseArray = game.guess(guessArray);
+            //check string before guess - not in game
+            responseArray = game.guess(guessArray);
 
-            while (responseArray.length == 0) {
-                System.out.print("Error: Length of guess must be " + game.LENGTH + " digits long and only contain digits from 0 to 7, please guess again\n");
-                guessString = promptUserInput("\nMake your guess (" + game.LENGTH +" numbers): ");
-                guessArray = new int[guessString.length()];
-                for (int i = 0; i < guessString.length(); i++) {
-                    guessArray[i] = Character.getNumericValue(guessString.charAt(i));
-                }
-                responseArray = game.guess(guessArray);
-            }
+            //seeing if game.guess 
+            // while (responseArray.length == 0) {
+            //     System.out.print("Error: Length of guess must be " + game.LENGTH + " digits long and only contain digits from 0 to 7, please guess again\n");
+            //     guessString = promptUserInput("\nMake your guess (" + game.LENGTH +" numbers): ");
+            //     guessArray = new int[guessString.length()];
+            //     for (int i = 0; i < guessString.length(); i++) {
+            //         guessArray[i] = Character.getNumericValue(guessString.charAt(i));
+            //     }
+            //     responseArray = game.guess(guessArray);
+            // }
 
             if (responseArray.length == 1) {
                 continue;
@@ -134,7 +145,7 @@ public class Session {
             
            
             
-
+            // Move to Game?
             System.out.println("Your guess: " + Arrays.toString(guessArray));
             
             System.out.println("Response: " + Arrays.toString(responseArray));
@@ -193,21 +204,26 @@ public class Session {
 
 
 
-    // private boolean checkGuessString(String guessString, int patternSize) {
-    //     // incorrect size
-    //     if (guessString.length() != patternSize) {
-    //         return false;
-    //     }
-    //     // not all letters are digits (0-7)
-    //     for (int i = 0; i < guessString.length(); i++) {
-    //         if (Character.getNumericValue(guessString.charAt(i)) > 8) {
-    //             return false;
-    //         }
-    //     }
-    //     return true;
+    private boolean checkValidGuessString(String guessString) {
+        //check if asking for hint
+        if (guessString.toLowerCase().equals("hint")) {
+            return true;
+        }
+
+        // incorrect size
+        if (guessString.length() != this.gameSize) {
+            return false;
+        }
+        // not all letters are digits (0-7)
+        for (int i = 0; i < guessString.length(); i++) {
+            if (Character.getNumericValue(guessString.charAt(i)) > 8) {
+                return false;
+            }
+        }
+        return true;
 
 
-    // }
+    }
 
     private void requestSettings() throws IOException {
         System.out.print("\nHow many numbers?: ");

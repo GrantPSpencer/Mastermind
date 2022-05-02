@@ -53,7 +53,9 @@ public class PatternGenerator {
             usedIntegerSet.add(pattern[i]);
         }
 
-        
+
+        // more likely to have adjacent numbers
+        // use collections.shuffle to get around this?
         for (int index : duplicatesIndexSet)  {
             int left = pattern[index] - 1;
             int right = pattern[index] + 1;
@@ -64,7 +66,8 @@ public class PatternGenerator {
                     usedIntegerSet.add(left);
                     break;
                 }
-                if (right < pattern.length && !usedIntegerSet.contains(right)) {
+                // right <= 7 
+                if (right <= 7 && !usedIntegerSet.contains(right)) {
                     pattern[index] = right;
                     usedIntegerSet.add(right);
                     break;

@@ -69,7 +69,7 @@ public class MastermindBotIT {
 
     private int[] findBestGuess() {
 
-        HashMap<int[], Double> map = new HashMap<>();
+        // HashMap<int[], Double> map = new HashMap<>();
         double maxSum = Integer.MIN_VALUE;
         int[] bestGuess = new int[] {0,0,0,0};
         System.out.print("\n");
@@ -94,6 +94,7 @@ public class MastermindBotIT {
     //gets feedback from guess to answer
     //reduces possible answer size according to the given feedback
     // calculates bits based off new answer size and current answer size
+    
     private double getBits(int[] guess, int[] answer) {
         int[] feedback = judgeGuessToAnswer(guess, answer);
         HashSet<int[]> newAnswerSet = filterAnswersByGuess(guess, feedback); 
@@ -102,8 +103,6 @@ public class MastermindBotIT {
 
         double bits = Math.log(1/probability) / Math.log(2);
         return bits;
-        
-        
     }
 
 

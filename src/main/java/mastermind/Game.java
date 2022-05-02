@@ -26,12 +26,15 @@ public class Game
     public boolean gameWon;
     
 
+    // new game(PaternGenerator.generatePattern(4, false));
     public Game(int[] pattern) {
         this.PATTERN = pattern;
         this.LENGTH = PATTERN.length;
+
         this.remainingGuesses = 10;
         this.guessHistory = new LinkedList<>();
         this.correctPlacementsArray = new int[this.LENGTH];
+
         this.gameOver = false;
         this.gameWon = false;
 
@@ -50,16 +53,17 @@ public class Game
             throw new Error("Game is already over");
         }
 
-        if (!checkGuessArray(guessArray)) {
-            if (guessArray.length == 4 && 'h' == Character.forDigit(guessArray[0], 36) && 'i' == Character.forDigit(guessArray[1], 36)
-             && 'n' == Character.forDigit(guessArray[2], 36) && 't' == Character.forDigit(guessArray[3], 36)) {
-                this.giveHint();
-                return new int[] {1};
-            }
-            return new int[] {};
-        }
+        //rename check valid guess
+        // if (!checkGuessArray(guessArray)) {
+        //     if (guessArray.length == 4 && 'h' == Character.forDigit(guessArray[0], 36) && 'i' == Character.forDigit(guessArray[1], 36)
+        //      && 'n' == Character.forDigit(guessArray[2], 36) && 't' == Character.forDigit(guessArray[3], 36)) {
+        //         this.giveHint();
+        //         return new int[] {1};
+        //     }
+        //     return new int[] {};
+        // }
 
-        int[] feedback = this.judgeGuess(guessArray);
+        int[] feedback = judgeGuess(guessArray);
         this.remainingGuesses--;
         this.guessHistory.addLast(guessArray);
         
@@ -88,6 +92,7 @@ public class Game
 
     }
 
+    //rename check valid guess
     private boolean checkGuessArray(int[] guessArray) {
         // incorrect size
         if (guessArray.length != this.LENGTH) {
@@ -133,6 +138,12 @@ public class Game
             }
         }
 
+        //0,1,2,3 pattern
+        //0,2,1,5 guess
+
+        // map: key -> digit from the pattern, value is frequency
+
+
         responseArray[0] = bulls;
         //check if game was won, if yes then mark game done + won and return early
         if (bulls == LENGTH) {
@@ -154,8 +165,8 @@ public class Game
             }
 
             //check if color is in the pattern
-            // if it is, set response value to 0
-            // if it is not, set response value to -1
+            // if it is, set response value to 0 (deprecated)
+            // if it is not, set response value to -1 (deprecated)
             if (patternMap.containsKey(guessArray[i]) && patternMap.get(guessArray[i]) > 0) {
                 patternMap.put(guessArray[i], patternMap.get(guessArray[i])-1);
                 // responseArray[i] = 0;
@@ -171,6 +182,7 @@ public class Game
 
     }
 
+    
     private void resetGame() {
         this.remainingGuesses = 10;
         this.guessHistory = new LinkedList<>();
@@ -189,6 +201,8 @@ public class Game
         //if player has correctly placed each digit across all guesses (but not won), then picks pseudo random number
         int randomInt = Math.round((int) (Math.random()*(this.LENGTH)));
         System.out.println("Digit " + this.PATTERN[randomInt] + " is located at index " + randomInt);
+        // add way to not give same hint twice
+        // array of booleans, after 2 guesses allow the hint to be given again?
     }
 
 
