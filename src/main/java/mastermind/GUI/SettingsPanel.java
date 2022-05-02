@@ -1,4 +1,4 @@
-package mastermind;
+package mastermind.GUI;
 
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;

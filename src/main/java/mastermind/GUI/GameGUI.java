@@ -1,4 +1,4 @@
-package mastermind;
+package mastermind.GUI;
 
 import javax.print.attribute.SetOfIntegerSyntax;
 
@@ -10,8 +10,13 @@ import javax.print.attribute.SetOfIntegerSyntax;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+
+import mastermind.Game.Game;
+
 import java.awt.Dimension;
 import java.awt.event.*;
+import mastermind.Game.Game;
+import mastermind.Game.PatternGenerator;
 
 
 

@@ -1,4 +1,4 @@
-package mastermind;
+package mastermind.Game;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -81,8 +81,8 @@ public class Game
 
         //check if no more guesses
         if (remainingGuesses == 0) {
-            System.out.print("\n");
-            System.out.println("Uh oh, looks like you lost you friggin loser!\n");
+        //     System.out.print("\n");
+        //     System.out.println("Uh oh, looks like you lost you friggin loser!\n");
             this.gameOver = true;
         }
 
@@ -150,8 +150,8 @@ public class Game
             this.gameOver = true;
             this.gameWon = true;
 
-            System.out.print("\n");
-            System.out.println("Congrats you won!\n");
+            // System.out.print("\n");
+            // System.out.println("Congrats you won!\n");
 
             return responseArray;
         }
@@ -188,19 +188,20 @@ public class Game
         this.guessHistory = new LinkedList<>();
     }
 
-    public void giveHint() {
+    public int[] giveHint() {
         //tells user location of undiscovered digit (not yet correctly placed in any guesses)
         for (int i = 0; i < this.LENGTH; i++) {
             if (correctPlacementsArray[i] != 1) {
-                System.out.println("Digit " + this.PATTERN[i] + " is located at index " + i);
+                // System.out.println("Digit " + this.PATTERN[i] + " is located at index " + i);
                 correctPlacementsArray[i] = 1;
-                return;
+                return new int[] {i, this.PATTERN[i]};
             }
         }
 
         //if player has correctly placed each digit across all guesses (but not won), then picks pseudo random number
         int randomInt = Math.round((int) (Math.random()*(this.LENGTH)));
-        System.out.println("Digit " + this.PATTERN[randomInt] + " is located at index " + randomInt);
+        // System.out.println("Digit " + this.PATTERN[randomInt] + " is located at index " + randomInt);
+        return new int[] {randomInt, this.PATTERN[randomInt]};
         // add way to not give same hint twice
         // array of booleans, after 2 guesses allow the hint to be given again?
     }

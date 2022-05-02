@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import mastermind.Game;
+import mastermind.Game.Game;
 
 public class Simulator {
     
@@ -46,10 +46,10 @@ public class Simulator {
         long startTime = System.currentTimeMillis();
         MastermindBotIT bot = new MastermindBotIT();
         
-        File file = new File("src/main/java/bot/performance_simulation_results.txt");
+        File file = new File("src/main/java/bot/simulation_results/game_simulations/performance_simulation_results.txt");
         FileWriter writer = new FileWriter(file);
 
-        File timeFile = new File("src/main/java/bot/performance_simulation_times.txt");
+        File timeFile = new File("src/main/java/bot/simulation_results/game_simulations/performance_simulation_times.txt");
         FileWriter timeWriter = new FileWriter(timeFile);
 
         int score; 

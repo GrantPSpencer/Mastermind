@@ -1,5 +1,6 @@
 package mastermind;
 
+import java.net.SocketTimeoutException;
 import java.util.Arrays;
 
 public class Test {
@@ -28,14 +29,16 @@ public class Test {
         // Character.forDig
 
 
-        int randomInt = Math.round((int) Math.random()*7);
+        // int randomInt = Math.round((int) Math.random()*7);
 
-        for (int i = 0; i < 10; i++) {
-            System.out.println(Math.round((int) (Math.random()*7)));
+        // for (int i = 0; i < 10; i++) {
+        //     System.out.println(Math.round((int) (Math.random()*7)));
             
-        }
+        // }
 
-
+            int i = 2000;
+            System.out.println((1/i));
+            System.out.println(1/(double)i);
 
 
 

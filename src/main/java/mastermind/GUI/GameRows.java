@@ -1,4 +1,4 @@
-package mastermind;
+package mastermind.GUI;
 
 import java.awt.Color;
 
@@ -12,6 +12,7 @@ import java.awt.Graphics;
 import java.awt.Dimension;
 import java.awt.event.*;
 import java.util.Arrays;
+import mastermind.Game.Game;
 
 
 public class GameRows extends JPanel {
@@ -92,7 +93,7 @@ public class GameRows extends JPanel {
                     int bulls = feedback[0];
                     int cows = feedback[1];
                     int j = 0;
-                    System.out.println("Bulls: " + bulls + ", Cows: " + cows);
+                    // System.out.println("Bulls: " + bulls + ", Cows: " + cows);
                     while (bulls > 0) {
                         responseLabels[buttonIndex][j].setBackground(Color.red);
                         bulls--;

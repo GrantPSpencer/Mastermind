@@ -1,10 +1,13 @@
-package mastermind;
+package mastermind.ConsoleUI;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.LinkedList;
+
+import mastermind.Game.Game;
+import mastermind.Game.PatternGenerator;
 
 public class Session {
     
@@ -112,7 +115,10 @@ public class Session {
 
             if (guessString.toLowerCase().equals("hint")) {
                 //give hint;
-                game.giveHint();
+                int hint[] = game.giveHint();
+                System.out.println("Digit " + hint[1] + " is located at index " + hint[0]);
+                // System.out.println("Digit " + this.PATTERN[i] + " is located at index " + i);
+
                 continue;
             }
 
@@ -157,7 +163,20 @@ public class Session {
         }
 
         //add game score
-        scoreHistory.addLast(10 - game.remainingGuesses);
+        int guessCount = 10-game.remainingGuesses;
+        scoreHistory.addLast(guessCount);
+        if (game.gameWon) {
+            System.out.print("\n");
+            if (guessCount == 1) {
+                System.out.println("Congrats you won in 1 guess!\n");
+            } else {
+                System.out.println("Congrats you won in " + guessCount + " guesses!\n");
+            }
+            
+        } else {
+            System.out.print("\n");
+            System.out.println("Uh oh, looks like you lost! :(\n");
+        }
     }
 
     // private String promptGuess(int patternSize) throws IOException {
