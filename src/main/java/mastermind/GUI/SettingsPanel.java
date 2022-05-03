@@ -1,14 +1,11 @@
 package mastermind.GUI;
 
-import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.awt.Dimension;
 
 public class SettingsPanel extends JPanel {
     

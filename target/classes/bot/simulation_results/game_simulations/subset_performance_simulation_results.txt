@@ -1,0 +1,10 @@
+Sum is: 5
+Length is: 4096
+Average performance is: 5.0
+Score Distribution is: 
+
+5: 1
+
+Started at: Mon May 02 20:52:26 PDT 2022
+Finished at: Mon May 02 20:54:07 PDT 2022
+Time to completion: 00:01:40:548

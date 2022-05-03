@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import mastermind.Game.Game;
 import mastermind.Game.PatternGenerator;
+import mastermind.Game.StaticCachedPatternGenerator;
 
 public class Session {
     
@@ -15,13 +16,15 @@ public class Session {
     public Game currentGame;
     private int currentGameSize;
     private boolean currentDuplicatesAllowed;
-    private LinkedList<Integer> scoreHistory;
+    private LinkedList<Integer> winningScoreHistory;
+    private int gamesPlayedCount;
 
     public Session() throws Exception {
         //escape code to clear console
         System.out.println("\033[H\033[2J");
         
-        this.scoreHistory = new LinkedList<>();
+        this.winningScoreHistory = new LinkedList<>();
+        this.gamesPlayedCount = 0;
         InputStreamReader inputReader = new InputStreamReader(System.in);
         this.bufferedReader = new BufferedReader(inputReader);
 
@@ -36,7 +39,7 @@ public class Session {
         //Loop process: Starts new game, has them play that game, then prompts user if they'd like to stop or play another
         //User stays in this loop until they respond "no" to start new game
         while (line.equals("y") || line.equals("yes")) {
-            this.startNewGame();
+            startNewGame();
             line = promptUserInput("Start a new game? (y/n): "); 
             while (!checkYesNoString(line)) {
                 System.out.println("Error, please respond with a \"y\" for yes ,or a \"n\" for no");
@@ -45,15 +48,20 @@ public class Session {
         }
 
         //When exiting a session, if the user has played at least 1 game, print the 
-            //# of games played and the average guess count
-        if (scoreHistory.size() > 0) {
-            int scoreHistorySum = 0;
-            for (int score : scoreHistory) {
-                scoreHistorySum += score;
+            //# of games won and played and the average guess count for games won
+        if (this.gamesPlayedCount > 0) {
+            if (this.winningScoreHistory.size() == 0) {
+                System.out.println("You won 0 of the " + this.gamesPlayedCount + " games you played.");
+            } else {
+                int winningScoreSum = 0;
+                for (int score : this.winningScoreHistory) {
+                    winningScoreSum += score;
+                }
+                System.out.println("You won " + this.winningScoreHistory.size() + " of the " + this.gamesPlayedCount + " games you played, with an average winning guess count of " 
+                + (double)(winningScoreSum/this.winningScoreHistory.size()) + " guesses." );
             }
-            System.out.println("\nSession over! You played " + scoreHistory.size() + " games, with an average of " + 
-            (double)(scoreHistorySum/scoreHistory.size()) + " guesses per game");
         }
+
 
         System.out.println("\nThanks for playing!");
         
@@ -76,7 +84,8 @@ public class Session {
             this.requestSettings();
         }
         
-        int[] newPattern = PatternGenerator.generatePattern(this.currentGameSize, this.currentDuplicatesAllowed);
+        // int[] newPattern = PatternGenerator.generatePattern(this.currentGameSize, this.currentDuplicatesAllowed);
+        int[] newPattern = StaticCachedPatternGenerator.getPattern(this.currentGameSize, this.currentDuplicatesAllowed);
         Game newGame = new Game(newPattern);
         this.playGame(newGame);
 
@@ -84,6 +93,7 @@ public class Session {
 
     // Potential optimizimation where checkguessString passes back the guessArray, since I'm already converting to numeric value in the check function?
     private void playGame(Game game) throws IOException {        
+        this.currentGame = game;
         int[] guessArray;
         String guessString;
         int[] responseArray;
@@ -124,8 +134,6 @@ public class Session {
 
         //After game finished, add game score to scoreHistory
         int guessCount = 10-game.remainingGuesses;
-        scoreHistory.addLast(guessCount);
-
 
         if (game.gameWon) {
             System.out.print("\n");
@@ -134,11 +142,12 @@ public class Session {
             } else {
                 System.out.println("Congrats you won in " + guessCount + " guesses!\n");
             }
-            
+            this.winningScoreHistory.addLast(guessCount);
         } else {
             System.out.print("\n");
             System.out.println("Uh oh, looks like you lost! :(\n");
         }
+        this.gamesPlayedCount++;
     }
 
 

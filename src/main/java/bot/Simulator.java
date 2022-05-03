@@ -48,10 +48,10 @@ public class Simulator {
         long startTime = System.currentTimeMillis();
         MastermindBotIT bot = new MastermindBotIT();
         
-        File file = new File("src/main/java/bot/simulation_results/game_simulations/performance_simulation_results.txt");
+        File file = new File("src/main/java/bot/simulation_results/game_simulations/subset_performance_simulation_results.txt");
         FileWriter writer = new FileWriter(file);
 
-        File timeFile = new File("src/main/java/bot/simulation_results/game_simulations/performance_simulation_times.txt");
+        File timeFile = new File("src/main/java/bot/simulation_results/game_simulations/subset_performance_simulation_times.txt");
         FileWriter timeWriter = new FileWriter(timeFile);
 
         int score; 
@@ -68,8 +68,10 @@ public class Simulator {
             scoreMap.put(score, scoreMap.getOrDefault(score, 0)+1);
             System.out.println("Average is: " +  (double)sum/(double)i);
             
-            timeWriter.write(Arrays.toString(pattern) + ", " + TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()-gameStartTime)+"\n");
-
+            timeWriter.write(Arrays.toString(pattern) + ", " + score + "guesses, " + TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()-gameStartTime)+" seconds\n");
+            if (i == 1) {
+                break;
+            }
         }
         timeWriter.flush();
         timeWriter.close();
@@ -90,7 +92,7 @@ public class Simulator {
         writer.write("Average performance is: " + ((double)sum / (double)i)+"\n");
         writer.write("Score Distribution is: \n");
         writer.write("\n");
-        for (Map.Entry entry : scoreMap.entrySet()) {
+        for (Map.Entry<Integer, Integer> entry : scoreMap.entrySet()) {
             writer.write(entry.getKey() + ": " + entry.getValue() + "\n");
         }
 

@@ -2,10 +2,14 @@ package mastermind.GUI;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import java.awt.Dimension;
 import java.awt.event.*;
+import java.util.LinkedList;
+
 import mastermind.Game.Game;
-import mastermind.Game.PatternGenerator;
+// import mastermind.Game.PatternGenerator;
 import mastermind.Game.StaticCachedPatternGenerator;
 
 public class GameGUI {
@@ -15,12 +19,19 @@ public class GameGUI {
     private Game currGame;
     private JFrame frame;
 
+
+    private LinkedList<Integer> winningScoreHistory;
+    private int gamesPlayedCount;
+
+
     //When instantiated, creates game with default code length = 4 and duplicates allowed = true
     public GameGUI() {
+        this.winningScoreHistory = new LinkedList<>();
+        this.gamesPlayedCount = 0;
 
         try {
             // this.currGame = new Game(PatternGenerator.generatePattern(4, true));
-            this.currGame = new Game(StaticCachedPatternGenerator.getPattern(4));
+            this.currGame = new Game(StaticCachedPatternGenerator.getPattern(4, true));
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -72,15 +83,47 @@ public class GameGUI {
         });
         frame.add(newGameButton);
 
+        //add function to confirm exit
+        //update session stats
+        //show user session stats on exit
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.addWindowListener( new WindowAdapter() {
+
+            public void windowClosing(WindowEvent e) {
+                
+                JFrame frame = (JFrame)e.getSource();
+                int confirmed = JOptionPane.showConfirmDialog(frame, 
+                "Are you sure you want to stop playing Mindbreaker? All progress will be lost",
+                "Exit Mastermind",JOptionPane.YES_NO_OPTION);
+
+                if (confirmed == JOptionPane.YES_OPTION) {
+                    updateSessionStatistics();
+                    String sessionStatsString = getSessionsStatisticsString();
+                    if (sessionStatsString.length() > 0) {
+                        JOptionPane.showMessageDialog(frame, sessionStatsString);
+                    }
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    // showSessionStatisticsFrame();
+                }
+                
+            }
+
+        });
+
         //Configuring display settings for game GUI (frame)
         frame.setLayout(null);
         frame.getContentPane().setPreferredSize(new Dimension(950, 500));
         frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
+
+        
+
     }
 
     public void startNewGame() throws Exception {
+
+        updateSessionStatistics();
+
 
         //Gets the currently selected options within the settings panel
         boolean duplicatesAllowed = settingsPanel.getDuplicatesAllowed();
@@ -102,7 +145,7 @@ public class GameGUI {
 
         //Creating new game object
         // this.currGame = new Game(PatternGenerator.generatePattern(codeLength, duplicatesAllowed));
-        this.currGame = new Game(StaticCachedPatternGenerator.getPattern(codeLength));
+        this.currGame = new Game(StaticCachedPatternGenerator.getPattern(codeLength, duplicatesAllowed));
         
         //Removing previous game rows
         // this.gameRows.setVisible(false);
@@ -120,6 +163,38 @@ public class GameGUI {
         frame.revalidate();
         
         
+    }
+
+    private void updateSessionStatistics() {
+        //Check if user has guessed at least once, if so then count as played game
+        if (this.currGame.remainingGuesses < 10) {
+            this.gamesPlayedCount++;
+        }
+        
+        //Check if user has won, then add to score history
+        if (this.currGame.gameWon) {
+            this.winningScoreHistory.add(10-this.currGame.remainingGuesses);
+        }
+    }
+
+    private String getSessionsStatisticsString() {
+
+        String statsString = "";
+        if (this.gamesPlayedCount > 0) {
+            if (this.winningScoreHistory.size() == 0) {
+                statsString = "<html>You won 0 of the " + this.gamesPlayedCount + " games you played.<html>";
+                
+            } else {
+                int winningScoreSum = 0;
+                for (int score : winningScoreHistory) {
+                    winningScoreSum += score;
+                }
+                statsString = "<html>You won " + winningScoreHistory.size() + " of the " + gamesPlayedCount + " games you played, with an average winning guess count of " 
+                + (double)(winningScoreSum/winningScoreHistory.size()) + " guesses.<html>";
+            }
+        }
+
+        return statsString;
     }
 
  

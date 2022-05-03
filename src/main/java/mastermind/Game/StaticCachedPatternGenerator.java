@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -12,7 +13,7 @@ public class StaticCachedPatternGenerator {
     private static int nextIndex;
 
 
-    public static int[] getPattern(int size) throws Exception {
+    public static int[] getPattern(int size, boolean duplicatesAllowed) throws Exception {
         if (patternsArray == null) {
             createPatternsArray();
         }
@@ -22,12 +23,17 @@ public class StaticCachedPatternGenerator {
             pattern[i] = patternsArray[nextIndex+i];
         }
 
+        
+
         nextIndex = nextIndex + size;
 
         if(nextIndex > (1000-16)) {
-            resetPatternsArray();
+            refreshPatternsArray();
         }
-        System.out.println("Index  " + nextIndex + " / 1000");
+
+        if (!duplicatesAllowed) {
+           return removeDuplicates(pattern);
+        }
         return pattern;
     }
 
@@ -37,7 +43,7 @@ public class StaticCachedPatternGenerator {
         nextIndex = 0;
     }
     
-    public static void resetPatternsArray() throws Exception {
+    public static void refreshPatternsArray() throws Exception {
         CompletableFuture.runAsync(() -> {
             try {
                 createPatternsArray();
@@ -52,11 +58,11 @@ public class StaticCachedPatternGenerator {
         long startTime = System.currentTimeMillis();
 
        
-        int[] pattern = new int[100];
+        int[] pattern = new int[1000];
         //Example API URL String:
         //https://www.random.org/integers/?num=4&min=1&max=6&col=1&base=10&format=plain&rnd=new
 
-        URL url = new URL("https://www.random.org/integers/?num=100&min=0&max=7&col=1&base=10&format=plain&rnd=new");
+        URL url = new URL("https://www.random.org/integers/?num=1000&min=0&max=7&col=1&base=10&format=plain&rnd=new");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         
@@ -76,6 +82,54 @@ public class StaticCachedPatternGenerator {
         return pattern;
     }
 
+
+    //Removes duplicates by continuously creating new number less than and greater than (-1/+1) 
+        // the duplicate value. Replaces duplicate once new value that satisfies conditions has been found
+    //Limitation: Inherently favors replacing with adjacent values, therefore not random
+    private static int[] removeDuplicates(int[] pattern) {
+
+        //Keep track of values that are already in array, so we do not create any new duplicates
+        HashSet<Integer> usedIntegerSet = new HashSet<>();
+        HashSet<Integer> duplicatesIndexSet = new HashSet<>();
+
+        //First pass, add all values to used integer set, if already in set, then add index to duplicates set
+        for (int i = 0; i < pattern.length; i++) {
+            if (usedIntegerSet.contains(pattern[i])) {
+                duplicatesIndexSet.add(i);
+            }
+            usedIntegerSet.add(pattern[i]);
+        }
+
+
+        //Favors replacing duplicates with adjacent values
+        //Use collections.shuffle to get around this?
+        for (int index : duplicatesIndexSet)  {
+
+            //Iterate left (-1) and right (+1) from original value
+            int left = pattern[index] - 1;
+            int right = pattern[index] + 1;
+
+            //Check if either satisfies condition, if not then continue iterating and rechecking
+            while (true) {
+                if (left >= 0 && !usedIntegerSet.contains(left)) {
+                    pattern[index] = left;
+                    usedIntegerSet.add(left);
+                    break;
+                }
+                if (right <= 7 && !usedIntegerSet.contains(right)) {
+                    pattern[index] = right;
+                    usedIntegerSet.add(right);
+                    break;
+                }
+                left--;
+                right++;
+
+            }
+
+        }
+
+        return pattern;
+    }
 
     //Prevoius attempt at async http connection for async new pattern array function
         // private static void asyncGetPatternsFromAPI() {

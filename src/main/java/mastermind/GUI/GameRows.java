@@ -119,7 +119,7 @@ public class GameRows extends JPanel {
                     }
 
                     //Iterate over next row, enabling the dropdown boxes and submit guess button
-                    if (buttonIndex != 9 && feedback[0] != 4) {
+                    if (buttonIndex != 9 && feedback[0] != COLS) {
                         for (JComboBox dropdownBox : dropdownBoxes[buttonIndex+1]) {
                             dropdownBox.setEnabled(true);
                         }
@@ -127,7 +127,8 @@ public class GameRows extends JPanel {
                     }
 
                     //Check if won (bulls == 0), else check if that was the last guess (loss)
-                    if (feedback[0] == 4) {
+                    
+                    if (feedback[0] == COLS) {
                         submitGuessButtons[buttonIndex].setText("Congrats, you won!");
                     } else if (buttonIndex == 9){
                         submitGuessButtons[buttonIndex].setText("Sorry, you lost! :( ");
