@@ -61,15 +61,15 @@ public class Simulator {
         long gameStartTime;
         for (int[] pattern : this.possibleAnswerSet) {
             gameStartTime = System.currentTimeMillis();
-            System.out.println("Progress: " + (++i) + " / " + possibleAnswerSet.size());
+            System.out.println("Progress: " + (++i) + " / 250");
 
             score = bot.playGame(new Game(pattern));
             sum += score;
             scoreMap.put(score, scoreMap.getOrDefault(score, 0)+1);
             System.out.println("Average is: " +  (double)sum/(double)i);
             
-            timeWriter.write(Arrays.toString(pattern) + ", " + score + "guesses, " + TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()-gameStartTime)+" seconds\n");
-            if (i == 1) {
+            timeWriter.write(Arrays.toString(pattern) + ", " + score + " guesses, " + TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()-gameStartTime)+" seconds\n");
+            if (i == 250) {
                 break;
             }
         }
