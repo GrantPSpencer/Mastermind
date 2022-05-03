@@ -1,7 +1,12 @@
 package mastermind;
 
 import java.net.SocketTimeoutException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Test {
     public static void main(String[] args) throws Exception {
@@ -36,10 +41,20 @@ public class Test {
             
         // }
 
-            int i = 2000;
-            System.out.println((1/i));
-            System.out.println(1/(double)i);
+        // int[] pattern = new int[100];
+        // HttpClient client = HttpClient.newHttpClient();
+        // HttpRequest request = HttpRequest.newBuilder()
+        //     .uri(URI.create("https://www.random.org/integers/?num=100&min=0&max=7&col=1&base=10&format=plain&rnd=new"))
+        //     .build();
 
+        // AtomicInteger i = new AtomicInteger();
+        // client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+        //     .thenApply(HttpResponse::body)
+        //     .thenAccept((x)-> pattern[i.getAndIncrement()] = Integer.parseInt(x));
+
+
+        // Thread.sleep(5000);
+        // System.out.println(Arrays.toString(pattern));
 
 
     }

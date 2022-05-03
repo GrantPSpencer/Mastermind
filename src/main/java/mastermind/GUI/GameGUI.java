@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.event.*;
 import mastermind.Game.Game;
 import mastermind.Game.PatternGenerator;
+import mastermind.Game.StaticCachedPatternGenerator;
 
 public class GameGUI {
 
@@ -18,7 +19,8 @@ public class GameGUI {
     public GameGUI() {
 
         try {
-            this.currGame = new Game(PatternGenerator.generatePattern(4, true));
+            // this.currGame = new Game(PatternGenerator.generatePattern(4, true));
+            this.currGame = new Game(StaticCachedPatternGenerator.getPattern(4));
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -99,7 +101,8 @@ public class GameGUI {
         }
 
         //Creating new game object
-        this.currGame = new Game(PatternGenerator.generatePattern(codeLength, duplicatesAllowed));
+        // this.currGame = new Game(PatternGenerator.generatePattern(codeLength, duplicatesAllowed));
+        this.currGame = new Game(StaticCachedPatternGenerator.getPattern(codeLength));
         
         //Removing previous game rows
         // this.gameRows.setVisible(false);

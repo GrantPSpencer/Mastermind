@@ -22,6 +22,7 @@ public class Game {
     public boolean gameWon;
 
     //Correct placements array used for always giving useful hint
+    //Hint queue used to add ordering to the hints that are given
     private int[] correctPlacementsArray;
     private Queue<Integer> hintQueue;
 

@@ -12,6 +12,7 @@ public class PatternGenerator {
     public static int[] generatePattern(int size, boolean duplicatesAllowed) throws Exception {
 
 
+        long startTime = System.currentTimeMillis();
         int[] pattern = new int[size];
         StringBuilder urlSB = new StringBuilder();
 
@@ -37,9 +38,12 @@ public class PatternGenerator {
         }
         
         //Removes duplicates (in non-random way) from array
-        if (!duplicatesAllowed) {
+        if (!duplicatesAllowed && size <= 8) {
             return removeDuplicates(pattern);
         }
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("Call took " + (endTime-startTime) + " ms for " + size + " numbers.");
 
         return pattern;
     }
@@ -90,5 +94,9 @@ public class PatternGenerator {
         }
 
         return pattern;
+    }
+
+    public static void main(String[] args) throws Exception {
+
     }
 }
