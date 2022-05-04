@@ -2,6 +2,7 @@
 Mastermind Game for LinkedIn Reach Coding Challenge
 
 ## Installation
+Note: This game will likely require java version "16.0.2" or higher to play
 1. Open your terminal and cd into the directory you want to download the Mastermind folder
 2.  In your terminal , type the following and hit enter:
 ```
