@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch ConsoleUI",
+            "request": "launch",
+            "mainClass": "mastermind.ConsoleUI.ConsoleUI",
+            "projectName": "mastermind"
+        },
+        {
+            "type": "java",
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}"

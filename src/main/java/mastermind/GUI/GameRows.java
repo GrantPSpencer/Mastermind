@@ -3,6 +3,7 @@ package mastermind.GUI;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.event.*;
 import java.awt.Color;
@@ -129,9 +130,12 @@ public class GameRows extends JPanel {
                     //Check if won (bulls == 0), else check if that was the last guess (loss)
                     
                     if (feedback[0] == COLS) {
+                        JOptionPane.showMessageDialog(submitGuessButton, "Congrats you won!");
                         submitGuessButtons[buttonIndex].setText("Congrats, you won!");
                     } else if (buttonIndex == 9){
-                        submitGuessButtons[buttonIndex].setText("Sorry, you lost! :( ");
+                        JOptionPane.showMessageDialog(submitGuessButton, "Sorry, you lost!");
+                        submitGuessButtons[buttonIndex].setText("Sorry, you lost!");
+                        
                     }
 
                 }

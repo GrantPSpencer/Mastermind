@@ -8,28 +8,36 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import mastermind.Game.CachedPatternGenerator;
 import mastermind.Game.Game;
 import mastermind.Game.PatternGenerator;
-import mastermind.Game.StaticCachedPatternGenerator;
+// import mastermind.Game.StaticCachedPatternGenerator;
+import mastermind.Game.Session;
 
-public class Session {
+public class ConsoleUI {
     
     private BufferedReader bufferedReader;
 
-    public Game currentGame;
-    private int currentGameSize;
-    private long gameStartTime;
-    private boolean currentDuplicatesAllowed;
-    private LinkedList<Integer> winningScoreHistory;
-    private int gamesPlayedCount;
-
-    public Session() throws Exception {
+    private Session session;
+    private int requestedGameSize;
+    private boolean requestedDuplicatesAllowed;
+    
+    // public Game currentGame;
+    // private long gameStartTime;
+    // private LinkedList<Integer> winningScoreHistory;
+    // private int gamesPlayedCount;
+    
+    
+    public ConsoleUI() throws Exception {
         
         //Escape code to clear console
         System.out.println("\033[H\033[2J");
         
-        this.winningScoreHistory = new LinkedList<>();
-        this.gamesPlayedCount = 0;
+        // this.winningScoreHistory = new LinkedList<>();
+        // this.gamesPlayedCount = 0;
+
+        this.session = new Session();
+
         InputStreamReader inputReader = new InputStreamReader(System.in);
         this.bufferedReader = new BufferedReader(inputReader);
 
@@ -54,19 +62,20 @@ public class Session {
 
         //When exiting a session, if the user has played at least 1 game, print the 
             //# of games won and played and the average guess count for games won
-        if (this.gamesPlayedCount > 0) {
-            if (this.winningScoreHistory.size() == 0) {
-                System.out.println("You won 0 of the " + this.gamesPlayedCount + " games you played.");
-            } else {
-                int winningScoreSum = 0;
-                for (int score : this.winningScoreHistory) {
-                    winningScoreSum += score;
-                }
-                System.out.println("You won " + this.winningScoreHistory.size() + " of the " + this.gamesPlayedCount + " games you played, with an average winning guess count of " 
-                + (double)(winningScoreSum/this.winningScoreHistory.size()) + " guesses." );
-            }
-        }
+        // if (this.gamesPlayedCount > 0) {
+        //     if (this.winningScoreHistory.size() == 0) {
+        //         System.out.println("You won 0 of the " + this.gamesPlayedCount + " games you played.");
+        //     } else {
+        //         int winningScoreSum = 0;
+        //         for (int score : this.winningScoreHistory) {
+        //             winningScoreSum += score;
+        //         }
+        //         System.out.println("You won " + this.winningScoreHistory.size() + " of the " + this.gamesPlayedCount + " games you played, with an average winning guess count of " 
+        //         + (double)(winningScoreSum/this.winningScoreHistory.size()) + " guesses." );
+        //     }
+        // }
 
+        System.out.println(session.getEndOfSessionStats()); 
 
         System.out.println("\nThanks for playing!");
         
@@ -77,7 +86,7 @@ public class Session {
         
         // get game settings from user input in terminal if already played a game, else if first game, prompt for settings;
         boolean newSettingsRequested;
-        if (currentGame != null) {
+        if (session.currentGame != null) {
             System.out.print("Would you like to use the settings from your previous game? (y/n): ");
             String line = this.bufferedReader.readLine();
             newSettingsRequested = (line.equals("n") || line.equals("no"));
@@ -90,34 +99,37 @@ public class Session {
         }
         
         // int[] newPattern = PatternGenerator.generatePattern(this.currentGameSize, this.currentDuplicatesAllowed);
-        int[] newPattern = StaticCachedPatternGenerator.getPattern(this.currentGameSize, this.currentDuplicatesAllowed);
-        Game newGame = new Game(newPattern);
+        // int[] newPattern = StaticCachedPatternGenerator.getPattern(this.currentGameSize, this.currentDuplicatesAllowed);
+        // Game newGame = new Game(newPattern);
+        
+        session.startNewGame(requestedGameSize, requestedDuplicatesAllowed);
 
-        this.playGame(newGame);
+        this.playGame(session.currentGame);
     }
 
     // Potential optimizimation where checkguessString passes back the guessArray, since I'm already converting to numeric value in the check function?
     private void playGame(Game game) throws IOException {        
-        this.currentGame = game;
+
+
         int[] guessArray;
         String guessString;
         int[] responseArray;
         System.out.println("\nIf you need a hint, just type \"hint\" as your response");
 
         //Plays until game is over (win or loss)
-        while (!game.gameOver) {
-            System.out.println("\nYou have " + game.remainingGuesses + " guesses left");
-            guessString = promptUserInput("Make your guess (" + game.LENGTH +" numbers): ");
+        while (!session.currentGame.gameOver) {
+            System.out.println("\nYou have " + session.currentGame.remainingGuesses + " guesses left");
+            guessString = promptUserInput("Make your guess (" + session.currentGameSize +" numbers): ");
 
             //Continuously prompts user input until valid guess is inputed
             while (!checkValidGuessString(guessString)) {
-                System.out.print("Error: Length of guess must be " + game.LENGTH + " digits long and only contain digits from 0 to 7, please guess again\n");
-                guessString = promptUserInput("\nMake your guess (" + game.LENGTH +" numbers): ");
+                System.out.print("Error: Length of guess must be " + session.currentGameSize + " digits long and only contain digits from 0 to 7, please guess again\n");
+                guessString = promptUserInput("\nMake your guess (" + session.currentGameSize +" numbers): ");
             }
 
             // if user input == "hint", then give hint and print to terminal
             if (guessString.toLowerCase().equals("hint")) {
-                int hint[] = game.giveHint();
+                int hint[] = session.currentGame.giveHint();
                 System.out.println("Digit " + hint[1] + " is located at index " + hint[0]);
                 continue;
             }
@@ -129,10 +141,10 @@ public class Session {
                 guessArray[i] = Character.getNumericValue(guessString.charAt(i));
             }
 
-            if (game.gameOver) {
+            if (session.currentGame.gameOver) {
                 break;
             }
-            responseArray = game.guess(guessArray);            
+            responseArray = session.currentGame.guess(guessArray);            
             
             System.out.println("\nYour guess: " + Arrays.toString(guessArray));
             System.out.println("Bulls: " + responseArray[0] + ", Cows: " + responseArray[1]);
@@ -140,21 +152,19 @@ public class Session {
         }
 
         //After game finished, add game score to scoreHistory
-        int guessCount = 10-game.remainingGuesses;
+        int guessCount = 10-session.currentGame.remainingGuesses;
 
-        if (game.gameWon) {
+        if (session.currentGame.gameWon) {
             System.out.print("\n");
             if (guessCount == 1) {
                 System.out.println("Congrats you won in 1 guess!\n");
             } else {
                 System.out.println("Congrats you won in " + guessCount + " guesses!\n");
             }
-            this.winningScoreHistory.addLast(guessCount);
         } else {
             System.out.print("\n");
             System.out.println("Uh oh, looks like you lost! :(\n");
         }
-        this.gamesPlayedCount++;
     }
 
 
@@ -194,7 +204,7 @@ public class Session {
         }
 
         //Check if correct size
-        if (guessString.length() != this.currentGameSize) {
+        if (guessString.length() != session.currentGameSize) {
             return false;
         }
         //Check if all letters are digits (0-7)
@@ -218,14 +228,14 @@ public class Session {
             line =this.bufferedReader.readLine(); 
         }
 
-        this.currentGameSize = Integer.parseInt(line);
+        requestedGameSize = Integer.parseInt(line);
         System.out.print("\nDuplicates allowed? (y/n): ");
         line = this.bufferedReader.readLine();
         while (!checkYesNoString(line)) {
             System.out.println("Error, please respond with a \"y\" for yes ,or a \"n\" for no");
             line = promptUserInput("Duplicates allowed? (y/n): ");
         }
-        this.currentDuplicatesAllowed = (line.equals("y") || line.equals("yes"));
+        requestedDuplicatesAllowed = (line.equals("y") || line.equals("yes"));
         
 
     }
@@ -240,7 +250,7 @@ public class Session {
 
     public static void main(String[] args) throws Exception {
         try {
-            Session session = new Session();
+            ConsoleUI consoleUI = new ConsoleUI();
             // session.startNewGame();
             
 

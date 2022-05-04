@@ -6,17 +6,20 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 
 
 
-public class StaticCachedPatternGenerator {
-    private static int[] patternsArray;
-    private static int nextIndex;
-    private static final int CACHE_SIZE = 1000;
+public class CachedPatternGenerator {
+    private int[] patternsArray;
+    private int nextIndex;
+    private final int CACHE_SIZE = 1000;
+
+    public CachedPatternGenerator() throws Exception {
+        createPatternsArray();
+    }
 
 
-    public static int[] getPattern(int size, boolean duplicatesAllowed) throws Exception {
+    public int[] getPattern(int size, boolean duplicatesAllowed) throws Exception {
         if (patternsArray == null) {
             createPatternsArray();
         }
@@ -30,7 +33,6 @@ public class StaticCachedPatternGenerator {
 
         nextIndex = nextIndex + size;
 
-        System.out.println(nextIndex + " / 100");
         if(nextIndex > (CACHE_SIZE-16)) {
             refreshPatternsArray();
         }
@@ -42,12 +44,12 @@ public class StaticCachedPatternGenerator {
     }
 
 
-    public static void createPatternsArray() throws Exception {
+    public void createPatternsArray() throws Exception {
         patternsArray = getPatternsFromAPI();
         nextIndex = 0;
     }
     
-    public static void refreshPatternsArray() throws Exception {
+    public void refreshPatternsArray() throws Exception {
         CompletableFuture.runAsync(() -> {
             try {
                 createPatternsArray();
@@ -57,7 +59,7 @@ public class StaticCachedPatternGenerator {
         });
     }
 
-    private static int[] getPatternsFromAPI() throws Exception {
+    private int[] getPatternsFromAPI() throws Exception {
         
         long startTime = System.currentTimeMillis();
 
@@ -90,7 +92,7 @@ public class StaticCachedPatternGenerator {
     //Removes duplicates by continuously creating new number less than and greater than (-1/+1) 
         // the duplicate value. Replaces duplicate once new value that satisfies conditions has been found
     //Limitation: Inherently favors replacing with adjacent values, therefore not random
-    private static int[] removeDuplicates(int[] pattern) {
+    private int[] removeDuplicates(int[] pattern) {
 
         //Keep track of values that are already in array, so we do not create any new duplicates
         HashSet<Integer> usedIntegerSet = new HashSet<>();
