@@ -10,7 +10,7 @@ git clone https://github.com/GrantPSpencer/Mastermind.git
 ```
 3. In your terminal, type the following and hit enter:
 ```
-"cd Mastermind"
+cd Mastermind
 ```
 4. At this point, you should be in the the Mastermind repository you've just downloaded. Now we will compile all the java files in this directory
 
