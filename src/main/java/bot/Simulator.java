@@ -48,10 +48,10 @@ public class Simulator {
         long startTime = System.currentTimeMillis();
         MastermindBotIT bot = new MastermindBotIT();
         
-        File file = new File("src/main/java/bot/simulation_results/game_simulations/subset_performance_simulation_results.txt");
+        File file = new File("src/main/java/bot/simulation_results/game_simulations/subset2_performance_simulation_results.txt");
         FileWriter writer = new FileWriter(file);
 
-        File timeFile = new File("src/main/java/bot/simulation_results/game_simulations/subset_performance_simulation_times.txt");
+        File timeFile = new File("src/main/java/bot/simulation_results/game_simulations/subset2_performance_simulation_times.txt");
         FileWriter timeWriter = new FileWriter(timeFile);
 
         int score; 
@@ -62,6 +62,9 @@ public class Simulator {
         for (int[] pattern : this.possibleAnswerSet) {
             gameStartTime = System.currentTimeMillis();
             System.out.println("Progress: " + (++i) + " / 250");
+            if (i < 250) {
+                continue;
+            }
 
             score = bot.playGame(new Game(pattern));
             sum += score;
@@ -69,7 +72,7 @@ public class Simulator {
             System.out.println("Average is: " +  (double)sum/(double)i);
             
             timeWriter.write(Arrays.toString(pattern) + ", " + score + " guesses, " + TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()-gameStartTime)+" seconds\n");
-            if (i == 250) {
+            if (i == 1000) {
                 break;
             }
         }

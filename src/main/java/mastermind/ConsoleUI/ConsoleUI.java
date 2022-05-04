@@ -32,9 +32,6 @@ public class ConsoleUI {
         
         //Escape code to clear console
         System.out.println("\033[H\033[2J");
-        
-        // this.winningScoreHistory = new LinkedList<>();
-        // this.gamesPlayedCount = 0;
 
         this.session = new Session();
 
@@ -60,22 +57,10 @@ public class ConsoleUI {
             }
         }
 
-        //When exiting a session, if the user has played at least 1 game, print the 
-            //# of games won and played and the average guess count for games won
-        // if (this.gamesPlayedCount > 0) {
-        //     if (this.winningScoreHistory.size() == 0) {
-        //         System.out.println("You won 0 of the " + this.gamesPlayedCount + " games you played.");
-        //     } else {
-        //         int winningScoreSum = 0;
-        //         for (int score : this.winningScoreHistory) {
-        //             winningScoreSum += score;
-        //         }
-        //         System.out.println("You won " + this.winningScoreHistory.size() + " of the " + this.gamesPlayedCount + " games you played, with an average winning guess count of " 
-        //         + (double)(winningScoreSum/this.winningScoreHistory.size()) + " guesses." );
-        //     }
-        // }
-
-        System.out.println(session.getEndOfSessionStats()); 
+        String sessionStatsString = session.getEndOfSessionStats();
+        if (sessionStatsString.length() > 0) {
+            System.out.println(sessionStatsString);
+        }
 
         System.out.println("\nThanks for playing!");
         
@@ -97,11 +82,7 @@ public class ConsoleUI {
         if (newSettingsRequested) {
             this.requestSettings();
         }
-        
-        // int[] newPattern = PatternGenerator.generatePattern(this.currentGameSize, this.currentDuplicatesAllowed);
-        // int[] newPattern = StaticCachedPatternGenerator.getPattern(this.currentGameSize, this.currentDuplicatesAllowed);
-        // Game newGame = new Game(newPattern);
-        
+               
         session.startNewGame(requestedGameSize, requestedDuplicatesAllowed);
 
         this.playGame(session.currentGame);
@@ -168,6 +149,7 @@ public class ConsoleUI {
     }
 
 
+    
     private String promptUserInput(String message) throws IOException {
         System.out.print(message);
  
@@ -238,27 +220,6 @@ public class ConsoleUI {
         requestedDuplicatesAllowed = (line.equals("y") || line.equals("yes"));
         
 
-    }
-
-    // private void checkTimer() {
-    //     if ((System.currentTimeMillis() - this.gameStartTime) >= 120000) {
-    //         currentGame.gameOver = true;
-    //     }
-    // }
-    
-   
-
-    public static void main(String[] args) throws Exception {
-        try {
-            ConsoleUI consoleUI = new ConsoleUI();
-            // session.startNewGame();
-            
-
-
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
     
 }

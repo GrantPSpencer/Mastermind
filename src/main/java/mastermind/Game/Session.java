@@ -9,36 +9,33 @@ public class Session {
     public int currentGameSize;
     public boolean currentGameDuplicatesAllowed;
     
-    private long sessionStartTime;
     public LinkedList<Integer> winningScoreHistory;
     public LinkedList<Game> gameHistory;
 
-    //TODO patternGenerator
-    CachedPatternGenerator cpg;
+    private CachedPatternGenerator cpg;
+
 
     public Session() throws Exception {
-
-        this.sessionStartTime = System.currentTimeMillis();
 
         this.winningScoreHistory = new LinkedList<>();
         this.gameHistory = new LinkedList<>();
     
         this.cpg = new CachedPatternGenerator();
 
-        // this.currentGame = new Game(cpg.getPattern(4, true));
-        // this.currentGameSize = 4;
-        // this.currentGameDuplicatesAllowed = true;
     }  
 
 
     public void startNewGame(int codeLength, boolean duplicatesAllowed) throws Exception {
         
+        //Anytime start new game is called, store the results of the current game into history
+            //unless this is the first game played in the session
         if (currentGame != null) {
             storeCurrentGame();
         }
 
-        int[] pattern = cpg.getPattern(codeLength, duplicatesAllowed);
 
+        //Instantiate new game with passed settings and set variables accordingly
+        int[] pattern = cpg.getPattern(codeLength, duplicatesAllowed);
         
         this.currentGame = new Game(pattern);
         this.currentGameSize = codeLength;
@@ -51,22 +48,30 @@ public class Session {
     private void storeCurrentGame() {
         
         //Check if at least 1 guess had been made
-        if (currentGame.remainingGuesses > 9) {
+        if (currentGame == null || currentGame.remainingGuesses > 9) {
             return;
         }
 
+        //If 1 guess has been made, then store in game history
         gameHistory.add(currentGame);
 
+        //Store the guess counts for any games where user won
         if (currentGame.gameWon) {
             winningScoreHistory.add((10-currentGame.remainingGuesses));
         }
     }
 
+
+
+    //Stores the current game's result and then returns session statistics
     public String getEndOfSessionStats() {
         storeCurrentGame();
         return getSessionsStatisticsString();
     }
 
+    //Called when exiting a session, if the user has played at least 1 game, print the 
+        //# of games won and played and the average guess count for games won
+    //Return empty string if no games played (no stats)
     private String getSessionsStatisticsString() {
 
         String statsString = "";

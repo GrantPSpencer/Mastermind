@@ -305,10 +305,11 @@ public class MastermindBotIT {
 
     public static void main(String[] args) {
         MastermindBotIT bot = new MastermindBotIT();
-        int[] pattern = new int[] {5,7,6,0};
+        int[] pattern = new int[] {5, 1, 3, 2};
         try {
-            bot.playGame(new Game(PatternGenerator.generatePattern(4, true)));
-            // bot.playGame(new Game(pattern));
+            // bot.playGame(new Game(PatternGenerator.generatePattern(4, true)));
+
+            bot.playGame(new Game(pattern));
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

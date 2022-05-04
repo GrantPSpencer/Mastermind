@@ -18,37 +18,39 @@ public class CachedPatternGenerator {
         createPatternsArray();
     }
 
-
     public int[] getPattern(int size, boolean duplicatesAllowed) throws Exception {
-        if (patternsArray == null) {
-            createPatternsArray();
-        }
-        int[] pattern = new int[size];
 
+        //Index over larger patterns array to produce subaray of specified length = size
+        int[] pattern = new int[size];
         for (int i = 0; i < size; i++) {
             pattern[i] = patternsArray[nextIndex+i];
         }
 
-        
-
+        //Move next index up for next call
         nextIndex = nextIndex + size;
-
+        
+        //If we are only 2 possible new patterns (max codelength = 8) away from indexing out, 
+            // then call the async refresh patterns array function
         if(nextIndex > (CACHE_SIZE-16)) {
             refreshPatternsArray();
         }
 
+        //If duplicates not allowed, then remove duplicates and return subarray
         if (!duplicatesAllowed) {
            return removeDuplicates(pattern);
         }
+
         return pattern;
     }
 
 
+    //Initial API call, cannot be async as it must block until API call completes on startup
     public void createPatternsArray() throws Exception {
         patternsArray = getPatternsFromAPI();
         nextIndex = 0;
     }
     
+    //Async API call, doesn't need to block as we already have a larger patterns array loaded
     public void refreshPatternsArray() throws Exception {
         CompletableFuture.runAsync(() -> {
             try {
@@ -59,15 +61,17 @@ public class CachedPatternGenerator {
         });
     }
 
+
+    //Connects to API and requests 1000 digits, reads them into an array and returns the array
     private int[] getPatternsFromAPI() throws Exception {
         
-        long startTime = System.currentTimeMillis();
 
        
-        int[] pattern = new int[CACHE_SIZE];
+        int[] patternsArray = new int[CACHE_SIZE];
         //Example API URL String:
         //https://www.random.org/integers/?num=4&min=1&max=6&col=1&base=10&format=plain&rnd=new
 
+        
         URL url = new URL("https://www.random.org/integers/?num="+CACHE_SIZE+"&min=0&max=7&col=1&base=10&format=plain&rnd=new");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
@@ -78,14 +82,11 @@ public class CachedPatternGenerator {
         //Converting API response to array of digits
         int i = 0;
         for (String line;  (line = bufferedReader.readLine()) != null; i++) {
-            pattern[i] = Integer.parseInt(line);
+            patternsArray[i] = Integer.parseInt(line);
 
         }
 
-        long endTime = System.currentTimeMillis();
-        System.out.println("Call took " + (endTime-startTime) + " ms for 1000 numbers.");
-
-        return pattern;
+        return patternsArray;
     }
 
 
@@ -137,7 +138,7 @@ public class CachedPatternGenerator {
         return pattern;
     }
 
-    //Prevoius attempt at async http connection for async new pattern array function
+    //Previous attempt at async http connection for async new pattern array function
         // private static void asyncGetPatternsFromAPI() {
 
     //     int[] pattern = new int[1000];

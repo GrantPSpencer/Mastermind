@@ -3,14 +3,8 @@ package mastermind.GUI;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-
 import java.awt.Dimension;
 import java.awt.event.*;
-import java.util.LinkedList;
-import java.util.concurrent.CompletableFuture;
-
-import mastermind.Game.Game;
 import mastermind.Game.Session;
 // import mastermind.Game.PatternGenerator;
 
@@ -23,12 +17,6 @@ public class GameGUI {
     private GiveHintPanel giveHintPanel;
     private Session session;
     
-    
-    // private Game currGame;
-    // private LinkedList<Integer> winningScoreHistory;
-    // private int gamesPlayedCount;
-
-
 
     //When instantiated, creates game with default code length = 4 and duplicates allowed = true
     public GameGUI() {
@@ -40,17 +28,6 @@ public class GameGUI {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-        // CompletableFuture.runAsync(() -> {
-        //     try {
-        //         Thread.sleep(5000);
-        //         System.out.println(this.giveHintPanel.hintLabel.getText());
-        //     } catch (InterruptedException e) {
-        //         // TODO Auto-generated catch block
-        //         e.printStackTrace();
-        //     }
-
-        // });
 
     }
 
@@ -64,18 +41,8 @@ public class GameGUI {
         session.startNewGame(codeLength, duplicatesAllowed);
 
         //Getting width of components based off # of columns (code length)
-        int width = codeLength*75;
-        if (codeLength == 4) {
-            width = 400+180;
-        } else if (codeLength == 5){
-            width = 520+120;
-        } else if (codeLength == 6) {
-            width = 620+120;
-        } else if (codeLength == 7) {
-            width = 720+120;
-        } else {
-            width = 820+120;
-        }
+        int width = 550 + (codeLength-4)*100;
+
 
         //Game row includes the 0-7 dropdowns, the bulls and cows display, and submit guess butotn
         this.gameRows = new GameRows(codeLength, session.currentGame);
@@ -104,7 +71,7 @@ public class GameGUI {
 
 
         this.giveHintPanel = new GiveHintPanel(session.currentGame);
-        giveHintPanel.setBounds(225,445, 150, 200);
+        giveHintPanel.setBounds(0,450, 550, 200);
         frame.add(giveHintPanel);
 
 
@@ -156,26 +123,8 @@ public class GameGUI {
         session.startNewGame(codeLength, duplicatesAllowed);
 
         //Width based off # of columns (code length)
-        int width = codeLength*75;
+        int width = 550 + (codeLength-4)*100;
 
-        if (codeLength == 4) {
-            width = 400+180;
-        } else if (codeLength == 5){
-            width = 520+120;
-        } else if (codeLength == 6) {
-            width = 620+120;
-        } else if (codeLength == 7) {
-            width = 720+120;
-        } else {
-            width = 820+120;
-        }
-
-        //Creating new game object
-        // this.currGame = new Game(PatternGenerator.generatePattern(codeLength, duplicatesAllowed));
-        // this.currGame = new Game(StaticCachedPatternGenerator.getPattern(codeLength, duplicatesAllowed));
-        
-        //Removing previous game rows
-        // this.gameRows.setVisible(false);
         frame.remove(this.gameRows);
 
         //Creating new game rows with new game object and adding to frame
@@ -186,7 +135,7 @@ public class GameGUI {
         frame.remove(this.giveHintPanel);
 
         this.giveHintPanel = new GiveHintPanel(session.currentGame);
-        giveHintPanel.setBounds(0,450, width, 400);
+        giveHintPanel.setBounds(0,450, 550, 200);
         frame.add(giveHintPanel);
 
         //Render removal of previous game rows
@@ -197,39 +146,5 @@ public class GameGUI {
         
         
     }
-
-    // private void updateSessionStatistics() {
-    //     //Check if user has guessed at least once, if so then count as played game
-    //     if (this.currGame.remainingGuesses < 10) {
-    //         this.gamesPlayedCount++;
-    //     }
-        
-    //     //Check if user has won, then add to score history
-    //     if (this.currGame.gameWon) {
-    //         this.winningScoreHistory.add(10-this.currGame.remainingGuesses);
-    //     }
-    // }
-
-    // private String getSessionsStatisticsString() {
-
-    //     String statsString = "";
-    //     if (this.gamesPlayedCount > 0) {
-    //         if (this.winningScoreHistory.size() == 0) {
-    //             statsString = "<html>You won 0 of the " + this.gamesPlayedCount + " games you played.<html>";
-                
-    //         } else {
-    //             int winningScoreSum = 0;
-    //             for (int score : winningScoreHistory) {
-    //                 winningScoreSum += score;
-    //             }
-    //             statsString = "<html>You won " + winningScoreHistory.size() + " of the " + gamesPlayedCount + " games you played, with an average winning guess count of " 
-    //             + (double)(winningScoreSum/winningScoreHistory.size()) + " guesses.<html>";
-    //         }
-    //     }
-
-    //     return statsString;
-    // }
-
- 
     
 }
