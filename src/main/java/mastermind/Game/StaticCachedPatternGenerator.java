@@ -6,11 +6,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
+
 
 
 public class StaticCachedPatternGenerator {
     private static int[] patternsArray;
     private static int nextIndex;
+    private static final int CACHE_SIZE = 1000;
 
 
     public static int[] getPattern(int size, boolean duplicatesAllowed) throws Exception {
@@ -27,7 +30,8 @@ public class StaticCachedPatternGenerator {
 
         nextIndex = nextIndex + size;
 
-        if(nextIndex > (1000-16)) {
+        System.out.println(nextIndex + " / 100");
+        if(nextIndex > (CACHE_SIZE-16)) {
             refreshPatternsArray();
         }
 
@@ -58,11 +62,11 @@ public class StaticCachedPatternGenerator {
         long startTime = System.currentTimeMillis();
 
        
-        int[] pattern = new int[1000];
+        int[] pattern = new int[CACHE_SIZE];
         //Example API URL String:
         //https://www.random.org/integers/?num=4&min=1&max=6&col=1&base=10&format=plain&rnd=new
 
-        URL url = new URL("https://www.random.org/integers/?num=1000&min=0&max=7&col=1&base=10&format=plain&rnd=new");
+        URL url = new URL("https://www.random.org/integers/?num="+CACHE_SIZE+"&min=0&max=7&col=1&base=10&format=plain&rnd=new");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         

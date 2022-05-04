@@ -3,10 +3,12 @@ package mastermind.GUI;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import java.awt.Dimension;
 import java.awt.event.*;
 import java.util.LinkedList;
+import java.util.concurrent.CompletableFuture;
 
 import mastermind.Game.Game;
 // import mastermind.Game.PatternGenerator;
@@ -18,6 +20,7 @@ public class GameGUI {
     private GameRows gameRows;
     private Game currGame;
     private JFrame frame;
+    private GiveHintPanel giveHintPanel;
 
 
     private LinkedList<Integer> winningScoreHistory;
@@ -37,6 +40,16 @@ public class GameGUI {
             e.printStackTrace();
         }
         createAndShowGUI();
+        // CompletableFuture.runAsync(() -> {
+        //     try {
+        //         Thread.sleep(5000);
+        //         System.out.println(this.giveHintPanel.hintLabel.getText());
+        //     } catch (InterruptedException e) {
+        //         // TODO Auto-generated catch block
+        //         e.printStackTrace();
+        //     }
+
+        // });
 
     }
 
@@ -65,7 +78,7 @@ public class GameGUI {
 
         //Code length and duplicates allowed options
         this.settingsPanel = new SettingsPanel();
-        settingsPanel.setBounds(0, 400, width, 300);
+        settingsPanel.setBounds(0, 400, width, 50);
         frame.add(settingsPanel);
 
         //New Game button, with action listener that calls the startNewGame function when pressed
@@ -82,6 +95,12 @@ public class GameGUI {
             }
         });
         frame.add(newGameButton);
+
+
+        this.giveHintPanel = new GiveHintPanel(this.currGame);
+        giveHintPanel.setBounds(225,445, 150, 200);
+        frame.add(giveHintPanel);
+
 
         //add function to confirm exit
         //update session stats
@@ -112,7 +131,7 @@ public class GameGUI {
 
         //Configuring display settings for game GUI (frame)
         frame.setLayout(null);
-        frame.getContentPane().setPreferredSize(new Dimension(950, 500));
+        frame.getContentPane().setPreferredSize(new Dimension(950, 525));
         frame.setVisible(true);
         frame.pack();
 
@@ -155,6 +174,12 @@ public class GameGUI {
         this.gameRows = new GameRows(codeLength, this.currGame);
         gameRows.setSize(width, 350);
         frame.add(gameRows);
+
+        frame.remove(this.giveHintPanel);
+
+        this.giveHintPanel = new GiveHintPanel(this.currGame);
+        giveHintPanel.setBounds(0,450, width, 400);
+        frame.add(giveHintPanel);
 
         //Render removal of previous game rows
         frame.repaint();

@@ -128,7 +128,7 @@ public class Game {
 
     }
 
-    //Unimplemented functionality (Add to GUI)
+    //Unimplemented functionality (Add to GUI?)
     private void resetGame() {
         this.remainingGuesses = 10;
         this.guessHistory = new LinkedList<>();

@@ -4,7 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
+
 import mastermind.Game.Game;
 import mastermind.Game.PatternGenerator;
 import mastermind.Game.StaticCachedPatternGenerator;
@@ -15,12 +18,14 @@ public class Session {
 
     public Game currentGame;
     private int currentGameSize;
+    private long gameStartTime;
     private boolean currentDuplicatesAllowed;
     private LinkedList<Integer> winningScoreHistory;
     private int gamesPlayedCount;
 
     public Session() throws Exception {
-        //escape code to clear console
+        
+        //Escape code to clear console
         System.out.println("\033[H\033[2J");
         
         this.winningScoreHistory = new LinkedList<>();
@@ -87,8 +92,8 @@ public class Session {
         // int[] newPattern = PatternGenerator.generatePattern(this.currentGameSize, this.currentDuplicatesAllowed);
         int[] newPattern = StaticCachedPatternGenerator.getPattern(this.currentGameSize, this.currentDuplicatesAllowed);
         Game newGame = new Game(newPattern);
-        this.playGame(newGame);
 
+        this.playGame(newGame);
     }
 
     // Potential optimizimation where checkguessString passes back the guessArray, since I'm already converting to numeric value in the check function?
@@ -101,7 +106,6 @@ public class Session {
 
         //Plays until game is over (win or loss)
         while (!game.gameOver) {
-
             System.out.println("\nYou have " + game.remainingGuesses + " guesses left");
             guessString = promptUserInput("Make your guess (" + game.LENGTH +" numbers): ");
 
@@ -125,6 +129,9 @@ public class Session {
                 guessArray[i] = Character.getNumericValue(guessString.charAt(i));
             }
 
+            if (game.gameOver) {
+                break;
+            }
             responseArray = game.guess(guessArray);            
             
             System.out.println("\nYour guess: " + Arrays.toString(guessArray));
@@ -222,6 +229,12 @@ public class Session {
         
 
     }
+
+    // private void checkTimer() {
+    //     if ((System.currentTimeMillis() - this.gameStartTime) >= 120000) {
+    //         currentGame.gameOver = true;
+    //     }
+    // }
     
    
 

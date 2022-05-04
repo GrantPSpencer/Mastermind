@@ -1,0 +1,56 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Launch MastermindBotIT",
+            "request": "launch",
+            "mainClass": "bot.MastermindBotIT",
+            "projectName": "mastermind"
+        },
+        {
+            "type": "java",
+            "name": "Launch Simulator",
+            "request": "launch",
+            "mainClass": "bot.Simulator",
+            "projectName": "mastermind"
+        },
+        {
+            "type": "java",
+            "name": "Launch Session",
+            "request": "launch",
+            "mainClass": "mastermind.ConsoleUI.Session",
+            "projectName": "mastermind"
+        },
+        {
+            "type": "java",
+            "name": "Launch PatternGenerator",
+            "request": "launch",
+            "mainClass": "mastermind.Game.PatternGenerator",
+            "projectName": "mastermind"
+        },
+        {
+            "type": "java",
+            "name": "Launch Main",
+            "request": "launch",
+            "mainClass": "mastermind.Main",
+            "projectName": "mastermind"
+        },
+        {
+            "type": "java",
+            "name": "Launch Test",
+            "request": "launch",
+            "mainClass": "mastermind.Test",
+            "projectName": "mastermind"
+        }
+    ]
+}
