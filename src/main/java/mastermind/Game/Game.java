@@ -44,7 +44,7 @@ public class Game {
 
 
         //For testing purposes only
-        System.out.println("Correct pattern: " + Arrays.toString(this.PATTERN));
+        System.out.println("\nCorrect pattern: " + Arrays.toString(this.PATTERN) + "\n");
 
     }
 

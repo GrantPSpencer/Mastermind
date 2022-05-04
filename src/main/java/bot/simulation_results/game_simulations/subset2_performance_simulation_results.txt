@@ -1,5 +1,5 @@
 Sum is: 3946
-Length is: 751
+Length is: 751 (250 - 1000)
 Average performance is: 5.254
 Score Distribution is: 
 

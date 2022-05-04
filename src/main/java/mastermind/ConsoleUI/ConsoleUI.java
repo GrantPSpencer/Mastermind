@@ -38,8 +38,12 @@ public class ConsoleUI {
         InputStreamReader inputReader = new InputStreamReader(System.in);
         this.bufferedReader = new BufferedReader(inputReader);
 
+        //Explaining rules in terminal
+        System.out.println("Rules: The computer will set a code of the specified length with the numbers 0 through 7, you have to 10 guesses to break the code!");
+        System.out.println("\nWith each guess, the computer will respond with the number of bulls (correctly placed digits) and cows (digits that are in the code, but in the wrong place).");
+        
         //Prompting user input, continuously prompts until valid string is given
-        String line = promptUserInput("Start a new game? (y/n): ");
+        String line = promptUserInput("\nStart a new game? (y/n): ");
         while (!checkYesNoString(line)) {
             System.out.println("Error, please respond with a \"y\" for yes ,or a \"n\" for no");
             line = promptUserInput("Start a new game? (y/n): ");
@@ -95,7 +99,8 @@ public class ConsoleUI {
         int[] guessArray;
         String guessString;
         int[] responseArray;
-        System.out.println("\nIf you need a hint, just type \"hint\" as your response");
+        System.out.println("When you make a guess, please enter the numbers without any commas or spaces in between them (Example: 0123 or 4567).");
+        System.out.println("\nIf you need a hint, just type \"hint\" as your response.");
 
         //Plays until game is over (win or loss)
         while (!session.currentGame.gameOver) {

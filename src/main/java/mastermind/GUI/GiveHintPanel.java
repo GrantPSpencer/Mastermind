@@ -40,8 +40,6 @@ public class GiveHintPanel extends JPanel {
                 int[] hintArray = currGame.giveHint();
                 int hintIndex = hintArray[0];
                 int hintValue = hintArray[1];
-                System.out.println(Arrays.toString(hintArray));
-                System.out.println(hintLabel.getText());
                 
                 hintLabel.setText("Digit " + hintValue + " is in column " +  (hintIndex+1));
             }

@@ -92,7 +92,7 @@ public class GameGUI {
 
                     String sessionStatsString = session.getEndOfSessionStats();
                     if (sessionStatsString.length() > 0) {
-                        JOptionPane.showMessageDialog(frame, sessionStatsString);
+                        JOptionPane.showMessageDialog(frame, "<html>" + sessionStatsString + "<html>", "End of Session Stats", 1);
                     }
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     // showSessionStatisticsFrame();
@@ -107,6 +107,10 @@ public class GameGUI {
         frame.getContentPane().setPreferredSize(new Dimension(950, 525));
         frame.setVisible(true);
         frame.pack();
+
+        
+        String rulesString = "<html>Rules: The computer will set a code of the specified length with the numbers 0 through 7,<br>you have to 10 guesses to break the code!<br><br>With each guess, the computer will respond with the number of bulls (red squares) and cows (yellow squares).<br><br>A bull is a correctly placed digit, while a cow is a digit that is in the code but has not been correctly placed<html>";
+        JOptionPane.showMessageDialog(frame, rulesString, "Game Rules", 1);
 
         
 
