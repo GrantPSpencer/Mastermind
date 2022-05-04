@@ -3,3 +3,5 @@
 /target
 /.vscode
 /src/test/java/mastermind
+mastermind/src/test/java/mastermind/AppTest.java
+src/test/java/mastermind/AppTest.java
