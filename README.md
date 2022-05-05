@@ -67,3 +67,31 @@ This subdirectory contains the following classes:
 * Session – This class handles the starting of new games and storing information regarding previous games. This class also allows us to retrieve statistics regarding the previously played games in a single session. 
 
  
+## Extensions
+
+#### Difficulty Level Options
+1. Code Length 
+    1. The user can choose a code length between 4 – 8. 
+    2.The higher the number, the more challenging the game will be.
+2. Duplicates allowed
+    1. The user can choose whether the code will have duplicates or not.
+    2. Allowing duplicate numbers in the code may make the game more challenging. 
+
+
+#### Give Hint Function
+1. When playing with the GUI, the user can press the “give hint” button at any time. Likewise, in the terminal UI, the user can type in “hint” as their guess and they will receive a hint from the computer. 
+2. The game tries to always give a useful hint. This is done by telling the user the location of a digit that has not already been correctly placed in any guess. 
+3. After looping through the digits that have not been correctly placed in any guess, the user will then be given the locations of the digits they correctly placed, in the order that they were placed. 
+4. If more hints are given, it simply repeats the hints in the order in which they were revealed. This is done by using an array to track the correctly placed digits and a queue to ensure that the hints are given in a continuous pattern. 
+5. While the user should not need more hints than there are digits in the code, you really just never know! 
+
+
+#### Session Statistics
+1. At the end of a game session (both for the GUI and terminal versions), the computer will return the statistics for the games you’ve played. 
+    1. A game is considered to have been played if you’ve made at least one guess in it. 
+2. The session class tracks the information regarding all the games that have been played and then returns the # of games played, # of games won, and the average amount of guesses it took to win across all the games you won in that session. 
+
+#### Mastermind Bot
+1. I've also implemented a bot that uses Information Theory to play the mastermind game by interacting directly with the game object. 
+2. Please refer to my [Mastermind Bot section](#mastermind-bot) if you’d like to read more about this. 
+
