@@ -35,6 +35,7 @@ cd Mastermind
     ```
     java -cp ./target mastermind.ConsoleMain  
     ```
+<br>
 
 ## Code Structure
 Note: The mastermind game files can be found in the Mastermind/src/main/java/mastermind directory. 
@@ -66,6 +67,7 @@ This subdirectory contains the following classes:
 * Game – This class handles all the game logic. Guesses can be passed to the game object and a response array containing the # of bulls and cows will be received. This class only keeps track of current-game variables such as remaining guess count, the code length, and if the game was won.  
 * Session – This class handles the starting of new games and storing information regarding previous games. This class also allows us to retrieve statistics regarding the previously played games in a single session. 
 
+<br>
  
 ## Extensions
 
@@ -95,6 +97,7 @@ This subdirectory contains the following classes:
 1. I've also implemented a bot that uses Information Theory to play the mastermind game by interacting directly with the game object. 
 2. Please refer to my [Mastermind Bot section](#mastermind-bot) below if you’d like to read more about this. 
 
+<br>
 
 ## Mastermind Bot
 
