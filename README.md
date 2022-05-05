@@ -3,12 +3,11 @@ Mastermind Game for LinkedIn Reach Coding Challenge
 
 ## Installation
 Note: This game will likely require java version "16.0.2" or higher to play <br> 
-
+If you do not have git installed on your machine, please refer here: [Git Installation Guide](https://github.com/git-guides/install-git)<br>
 
 
 1. Open your terminal and cd into the directory where you want to download the Mastermind folder
 2.  In your terminal , type the following and hit enter:
-    1. If you do not have git installed on your machine, please refer here: [Git Installation Guide](https://github.com/git-guides/install-git)
 ```
 git clone https://github.com/GrantPSpencer/Mastermind.git
 ````
