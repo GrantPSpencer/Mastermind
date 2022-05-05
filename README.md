@@ -34,6 +34,10 @@ cd Mastermind
     ```
     java -cp ./target mastermind.ConsoleMain  
     ```
+    3. To facilitate testing, the game currently prints the correct pattern into the terminal. If you'd like to disable this feature, please delete the following line of code on line 47 in the file src/main/java/mastermind/Game/Game.java:
+    ```
+    System.out.println("\nCorrect pattern: " + Arrays.toString(this.PATTERN) + "\n");
+    ```
 <br>
 
 ## Code Structure
