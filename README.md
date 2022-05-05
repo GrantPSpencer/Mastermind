@@ -136,4 +136,8 @@ There are 5 different types of first guesses,
 I’ve included a link below to a [Google Spreadsheet](https://docs.google.com/spreadsheets/d/1iNImNiLwGUYSth-Vu3W8HyMPsZ9u5vhhFmBMesS6iNE/edit?usp=sharing) with the sorted data. These patterns have been listed from best to worst in terms of performance, with 4 different numbers yielding the greatest bits on average and in the worst case and with 4 of the same numbers yielding the lowest. The difference between adjacent pattern types is fairly minimal in both average and worst case bits, with the only exception being that the pattern of 4 of the same number scores significantly worse than all other patterns.
 
 #### Preliminary Results
-I’ve only run the bot over 1000 possible games, across which it has taken an average of 5.25 guesses to win. Currently, the algorithm is quite slow and needs to be improved if it is to be run over the entire set of 4096 (8^4) possible answers. I discuss this further in the [challenges section.](#mastermind-bot-limitations)
+I’ve only run the bot over 1000 possible games, across which it has taken an average of 5.25 guesses to win. Currently, the algorithm is quite slow and needs to be improved if it is to be run over the entire set of 4096 (8^4) possible answers. I discuss this further in the [challenges section.](#mastermind-bot-limitations) 
+
+Current Algorithm's Peformance Over Set of 1000 Possible Codes (length 4, duplicates allowed):
+![Mastermind Sim Results](https://user-images.githubusercontent.com/80296166/166864162-5942c7de-c718-4158-bd7f-7436a7de9868.png)
+
