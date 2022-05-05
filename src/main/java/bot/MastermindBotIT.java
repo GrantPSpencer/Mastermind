@@ -114,7 +114,7 @@ public class MastermindBotIT {
 
     //Calculates bits based off of the size of the new possible answer set
     //The smaller the new answer set (i.e., the greater the original set is reduced), the more bits are gained
-    //Our program doesn't need to know the actual bits formula, it can just use the newAnswer size as an approximation
+    //(Attempting to optimize) Our program doesn't need to know the actual bits formula, it can just use the newAnswer size as an approximation
         // since all guesses are using the same original possible answer set (original formula commented out below)
 
     private double getBits(int[] guess, int[] answer) {
