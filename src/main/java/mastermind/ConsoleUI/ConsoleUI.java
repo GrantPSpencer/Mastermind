@@ -207,11 +207,11 @@ public class ConsoleUI {
 
     //Prompt user for settings and then assign accordingly
     private void requestSettings() throws IOException {
-        System.out.print("\nHow many numbers?: ");
+        System.out.print("\nHow many digits? (4-8): ");
         String line = this.bufferedReader.readLine(); 
         while (!checkSingleNumberString(line)) {
             System.out.println("Number of digits must be between 4 and 8, inclusive");
-            System.out.print("\nHow many digits?: ");
+            System.out.print("\nHow many digits?(4-8): ");
             line =this.bufferedReader.readLine(); 
         }
 
