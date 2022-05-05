@@ -211,7 +211,7 @@ public class ConsoleUI {
         String line = this.bufferedReader.readLine(); 
         while (!checkSingleNumberString(line)) {
             System.out.println("Number of digits must be between 4 and 8, inclusive");
-            System.out.print("\nHow many digits?(4-8): ");
+            System.out.print("\nHow many digits? (4-8): ");
             line =this.bufferedReader.readLine(); 
         }
 
