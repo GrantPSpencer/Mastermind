@@ -102,6 +102,9 @@ This subdirectory contains the following classes:
 ## Mastermind Bot
 
 Note: This bot is very similar to the bot in my [WordleHelper](https://github.com/GrantPSpencer/WordleHelper) project, feel free to check that out as well.<br>I also heavily recommend watching [this video](https://www.youtube.com/watch?v=v68zYyaEmEA) on Information Theory and Wordle by the math youtuber 3Blue1Brown – this video is what inspired me to create my own bot. 
+<br>
+<br>
+Note: The mastermind bot files can be found in the Mastermind/src/main/java/bot directory.
 
 #### How It Works
 The bot is given a game with a set code to play and for each turn, makes the best guess given the information it received from the previous guess. Even when a human plays Mastermind, the goal is to use each guess to continuously reduce the possible answers until you’ve narrowed it down to one. This is exactly what the bot does. It uses each guess as an opportunity to narrow down the possible answers until there is only one possible answer left.   
@@ -141,3 +144,9 @@ I’ve only run the bot over 1000 possible games, across which it has taken an a
 Current Algorithm's Peformance Over Set of 1000 Possible Codes (length 4, duplicates allowed):
 ![Mastermind Sim Results](https://user-images.githubusercontent.com/80296166/166864162-5942c7de-c718-4158-bd7f-7436a7de9868.png)
 
+#### Improvements
+Currently, the algorithm is quite slow and needs to be improved if it is to be run over the entire set of 4096 (8^4) possible answers. In some cases where the first guess gives little information, the runtime of the algorithm can be quite slow. Because it’s Big O complexity is N^2, if the program has to loop over a set of 1000 possible answers versus a set of 200 possible answers, a SIGNIFICANT difference in the runtime is observed. 
+
+I have attempted to make very minor improvements to the algorithm by eliminating “unnecessary” calculations and reducing the amount of work done at each step. Unfortunately, I do not believe it is possible to make an algorithm that is centered on information theory to be more efficient than O(n^2), though I would love to be corrected on this!
+
+The most obvious answer to reducing the running time of this algorithm would be to simply reduce the possible answer set size. Eliminating duplicates (1680 possible answers) or reducing the pool of potential digits to choose from to 0-5 ( 1296 possible answers) would both have significant impacts on the amount of calculations needed to play a game.  
